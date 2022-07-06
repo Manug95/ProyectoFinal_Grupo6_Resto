@@ -27,14 +27,24 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem9 = new javax.swing.JMenuItem();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        jmiSalir = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jtmMesero = new javax.swing.JMenuItem();
+        jmiMesa = new javax.swing.JMenuItem();
+        jmiProducto = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jmiOrdenar = new javax.swing.JMenuItem();
+        jmiReservar = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jmiStock = new javax.swing.JMenuItem();
+        jmiConMesero = new javax.swing.JMenuItem();
+        jmiConMesas = new javax.swing.JMenuItem();
+
+        jMenuItem9.setText("jMenuItem9");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,50 +63,116 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1.setBorder(null);
         jMenuBar1.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
 
+        jMenu3.setBackground(new java.awt.Color(255, 255, 255));
+        jMenu3.setForeground(new java.awt.Color(255, 102, 0));
+        jMenu3.setText("Salir");
+        jMenu3.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+
+        jmiSalir.setBackground(new java.awt.Color(255, 255, 255));
+        jmiSalir.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/restog6/resources/exitIcon11.png"))); // NOI18N
+        jmiSalir.setText("Salir");
+        jmiSalir.setOpaque(true);
+        jmiSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiSalirActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jmiSalir);
+
+        jMenuBar1.add(jMenu3);
+
         jMenu1.setBackground(new java.awt.Color(255, 102, 51));
         jMenu1.setForeground(new java.awt.Color(255, 255, 255));
         jMenu1.setText("Registrar");
         jMenu1.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jMenu1.setOpaque(true);
 
-        jMenuItem1.setBackground(new java.awt.Color(255, 255, 255));
-        jMenuItem1.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenuItem1.setText("Mesero");
-        jMenuItem1.setOpaque(true);
-        jMenu1.add(jMenuItem1);
+        jtmMesero.setBackground(new java.awt.Color(255, 255, 255));
+        jtmMesero.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jtmMesero.setText("Mesero");
+        jtmMesero.setOpaque(true);
+        jMenu1.add(jtmMesero);
 
-        jMenuItem2.setBackground(new java.awt.Color(255, 255, 255));
-        jMenuItem2.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenuItem2.setText("Mesa");
-        jMenuItem2.setOpaque(true);
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jmiMesa.setBackground(new java.awt.Color(255, 255, 255));
+        jmiMesa.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiMesa.setText("Mesa");
+        jmiMesa.setOpaque(true);
+        jmiMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jmiMesaActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(jmiMesa);
 
-        jMenuItem3.setBackground(new java.awt.Color(255, 255, 255));
-        jMenuItem3.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenuItem3.setText("Producto");
-        jMenuItem3.setOpaque(true);
-        jMenu1.add(jMenuItem3);
+        jmiProducto.setBackground(new java.awt.Color(255, 255, 255));
+        jmiProducto.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiProducto.setText("Producto");
+        jmiProducto.setOpaque(true);
+        jMenu1.add(jmiProducto);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setBackground(new java.awt.Color(255, 102, 51));
         jMenu2.setForeground(new java.awt.Color(255, 255, 255));
-        jMenu2.setText("Ordenar");
+        jMenu2.setText("Pedido");
         jMenu2.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jMenu2.setOpaque(true);
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        jmiOrdenar.setBackground(new java.awt.Color(255, 255, 255));
+        jmiOrdenar.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiOrdenar.setText("Ordenar");
+        jmiOrdenar.setOpaque(true);
+        jMenu2.add(jmiOrdenar);
+
+        jmiReservar.setBackground(new java.awt.Color(255, 255, 255));
+        jmiReservar.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiReservar.setText("Reservar");
+        jmiReservar.setOpaque(true);
+        jMenu2.add(jmiReservar);
+
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setBackground(new java.awt.Color(255, 102, 51));
-        jMenu3.setForeground(new java.awt.Color(255, 255, 255));
-        jMenu3.setText("Reservar");
-        jMenu3.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenu3.setOpaque(true);
-        jMenuBar1.add(jMenu3);
+        jMenu4.setBackground(new java.awt.Color(255, 102, 51));
+        jMenu4.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu4.setText("Consultas");
+        jMenu4.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jMenu4.setOpaque(true);
+
+        jmiStock.setBackground(new java.awt.Color(255, 255, 255));
+        jmiStock.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiStock.setText("Stock");
+        jmiStock.setOpaque(true);
+        jmiStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiStockActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jmiStock);
+
+        jmiConMesero.setBackground(new java.awt.Color(255, 255, 255));
+        jmiConMesero.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiConMesero.setText("Meseros");
+        jmiConMesero.setOpaque(true);
+        jmiConMesero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiConMeseroActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jmiConMesero);
+
+        jmiConMesas.setBackground(new java.awt.Color(255, 255, 255));
+        jmiConMesas.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
+        jmiConMesas.setText("Mesas");
+        jmiConMesas.setOpaque(true);
+        jMenu4.add(jmiConMesas);
+
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -114,9 +190,26 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jmiMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiMesaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_jmiMesaActionPerformed
+
+    private void jmiStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jmiStockActionPerformed
+
+    private void jmiConMeseroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiConMeseroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jmiConMeseroActionPerformed
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+       
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    //--------------Salir------
+    private void jmiSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSalirActionPerformed
+       dispose();
+    }//GEN-LAST:event_jmiSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,9 +251,17 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JMenuItem jmiConMesas;
+    private javax.swing.JMenuItem jmiConMesero;
+    private javax.swing.JMenuItem jmiMesa;
+    private javax.swing.JMenuItem jmiOrdenar;
+    private javax.swing.JMenuItem jmiProducto;
+    private javax.swing.JMenuItem jmiReservar;
+    private javax.swing.JMenuItem jmiSalir;
+    private javax.swing.JMenuItem jmiStock;
+    private javax.swing.JMenuItem jtmMesero;
     // End of variables declaration//GEN-END:variables
 }

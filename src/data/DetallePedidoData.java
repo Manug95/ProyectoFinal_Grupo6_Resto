@@ -94,7 +94,7 @@ public class DetallePedidoData {
         try {
             String sql = "DELETE FROM detallePedido WHERE idProducto = ? AND idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            //ps.setInt(1, producto.getId());
+            ps.setInt(1, producto.getIdProducto());
             ps.setInt(2, pedido.getIdPedido());
             if (ps.executeUpdate() != 0){
                 eliminado = true;
