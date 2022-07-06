@@ -11,7 +11,7 @@ public class Producto {
     //                                              ATRIBUTOS
     //---------------------------------------------------------------------------------------------------------------
     private int idProducto;
-    private String nombre;
+    private String nombreProducto;
     private double precio;
     private int stock;
     private boolean activo;
@@ -22,14 +22,14 @@ public class Producto {
 
     public Producto(int idProducto, String nombre, double precio, int stock, boolean activo) {
         this.idProducto = idProducto;
-        this.nombre = nombre;
+        this.nombreProducto = nombre;
         this.precio = precio;
         this.stock = stock;
         this.activo = activo;
     }
 
     public Producto(String nombre, double precio, int stock, boolean activo) {
-        this.nombre = nombre;
+        this.nombreProducto = nombre;
         this.precio = precio;
         this.stock = stock;
         this.activo = activo;
@@ -43,12 +43,12 @@ public class Producto {
         this.idProducto = idProducto;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreProducto() {
+        return nombreProducto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreProducto(String nombre) {
+        this.nombreProducto = nombre;
     }
 
     public double getPrecio() {
@@ -78,7 +78,7 @@ public class Producto {
     //---------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", stock=" + stock + ", activo=" + activo + '}';
+        return "Producto{" + "idProducto=" + idProducto + ", nombreProducto=" + nombreProducto + ", precio=" + precio + ", stock=" + stock + ", activo=" + activo + '}';
     }
 
     @Override

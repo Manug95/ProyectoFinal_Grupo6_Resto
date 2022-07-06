@@ -11,7 +11,7 @@ public class Mesero {
     //                                              ATRIBUTOS
     //---------------------------------------------------------------------------------------------------------------
     private int idMesero;
-    private String nombre;
+    private String nombreMesero;
     private String apellido;
     private String dni;
     private String telefono;
@@ -23,7 +23,7 @@ public class Mesero {
 
     public Mesero(int idMesero, String nombre, String apellido, String dni, String telefono, boolean activo) {
         this.idMesero = idMesero;
-        this.nombre = nombre;
+        this.nombreMesero = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.telefono = telefono;
@@ -31,7 +31,7 @@ public class Mesero {
     }
 
     public Mesero(String nombre, String apellido, String dni, String telefono, boolean activo) {
-        this.nombre = nombre;
+        this.nombreMesero = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.telefono = telefono;
@@ -46,12 +46,12 @@ public class Mesero {
         this.idMesero = idMesero;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreMesero() {
+        return nombreMesero;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreMesero(String nombre) {
+        this.nombreMesero = nombre;
     }
 
     public String getApellido() {
@@ -89,7 +89,7 @@ public class Mesero {
     //---------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "Nombre=" + nombre + ", apellido=" + apellido;
+        return "NombreMesero=" + nombreMesero + ", apellido=" + apellido;
     }
 
     @Override
