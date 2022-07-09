@@ -1,21 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package restog6.Vistas;
 
+import data.Conexion;
+
 /**
- *
- * @author Valentina
+ * @author Grupo 6
+ * Fernandez Valentina
+ * Romero Jorge
+ * Manuel Gutierrez
  */
 public class Menu extends javax.swing.JFrame {
-
+    private Conexion conexion;
+    
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
+        this.conexion = new Conexion();
     }
 
     /**
@@ -72,7 +74,6 @@ public class Menu extends javax.swing.JFrame {
         jmiSalir.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/restog6/resources/exitIcon11.png"))); // NOI18N
         jmiSalir.setText("Salir");
-        jmiSalir.setOpaque(true);
         jmiSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiSalirActionPerformed(evt);
@@ -86,18 +87,15 @@ public class Menu extends javax.swing.JFrame {
         jMenu1.setForeground(new java.awt.Color(255, 255, 255));
         jMenu1.setText("Registrar");
         jMenu1.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenu1.setOpaque(true);
 
         jtmMesero.setBackground(new java.awt.Color(255, 255, 255));
         jtmMesero.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jtmMesero.setText("Mesero");
-        jtmMesero.setOpaque(true);
         jMenu1.add(jtmMesero);
 
         jmiMesa.setBackground(new java.awt.Color(255, 255, 255));
         jmiMesa.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiMesa.setText("Mesa");
-        jmiMesa.setOpaque(true);
         jmiMesa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiMesaActionPerformed(evt);
@@ -108,7 +106,6 @@ public class Menu extends javax.swing.JFrame {
         jmiProducto.setBackground(new java.awt.Color(255, 255, 255));
         jmiProducto.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiProducto.setText("Producto");
-        jmiProducto.setOpaque(true);
         jMenu1.add(jmiProducto);
 
         jMenuBar1.add(jMenu1);
@@ -117,7 +114,6 @@ public class Menu extends javax.swing.JFrame {
         jMenu2.setForeground(new java.awt.Color(255, 255, 255));
         jMenu2.setText("Pedido");
         jMenu2.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenu2.setOpaque(true);
         jMenu2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenu2ActionPerformed(evt);
@@ -127,13 +123,11 @@ public class Menu extends javax.swing.JFrame {
         jmiOrdenar.setBackground(new java.awt.Color(255, 255, 255));
         jmiOrdenar.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiOrdenar.setText("Ordenar");
-        jmiOrdenar.setOpaque(true);
         jMenu2.add(jmiOrdenar);
 
         jmiReservar.setBackground(new java.awt.Color(255, 255, 255));
         jmiReservar.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiReservar.setText("Reservar");
-        jmiReservar.setOpaque(true);
         jMenu2.add(jmiReservar);
 
         jMenuBar1.add(jMenu2);
@@ -142,12 +136,10 @@ public class Menu extends javax.swing.JFrame {
         jMenu4.setForeground(new java.awt.Color(255, 255, 255));
         jMenu4.setText("Consultas");
         jMenu4.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jMenu4.setOpaque(true);
 
         jmiStock.setBackground(new java.awt.Color(255, 255, 255));
         jmiStock.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiStock.setText("Stock");
-        jmiStock.setOpaque(true);
         jmiStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiStockActionPerformed(evt);
@@ -158,7 +150,6 @@ public class Menu extends javax.swing.JFrame {
         jmiConMesero.setBackground(new java.awt.Color(255, 255, 255));
         jmiConMesero.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiConMesero.setText("Meseros");
-        jmiConMesero.setOpaque(true);
         jmiConMesero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiConMeseroActionPerformed(evt);
@@ -169,7 +160,6 @@ public class Menu extends javax.swing.JFrame {
         jmiConMesas.setBackground(new java.awt.Color(255, 255, 255));
         jmiConMesas.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiConMesas.setText("Mesas");
-        jmiConMesas.setOpaque(true);
         jMenu4.add(jmiConMesas);
 
         jMenuBar1.add(jMenu4);
@@ -191,7 +181,12 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmiMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiMesaActionPerformed
-        // TODO add your handling code here:
+        MesaView mv = new MesaView(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(mv);
+        jDesktopPane1.moveToFront(mv);
+        jDesktopPane1.repaint();
+        mv.setVisible(true);
     }//GEN-LAST:event_jmiMesaActionPerformed
 
     private void jmiStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiStockActionPerformed
@@ -247,7 +242,7 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
+    public static javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

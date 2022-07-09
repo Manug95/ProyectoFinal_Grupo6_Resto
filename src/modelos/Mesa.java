@@ -22,13 +22,13 @@ public class Mesa {
     public Mesa(int idMesa, int capacidad, char estado, boolean activo) {
         this.idMesa = idMesa;
         this.capacidad = capacidad;
-        this.estado = estado;
+        this.estado = Character.toUpperCase(estado);
         this.activo = activo;
     }
 
     public Mesa(int capacidad, char estado, boolean activo) {
         this.capacidad = capacidad;
-        this.estado = estado;
+        this.estado = Character.toUpperCase(estado);
         this.activo = activo;
     }
 
@@ -53,7 +53,7 @@ public class Mesa {
     }
 
     public void setEstado(char estado) {
-        this.estado = estado;
+        this.estado = Character.toUpperCase(estado);
     }
 
     public boolean isActivo() {
@@ -67,7 +67,7 @@ public class Mesa {
     //---------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "idMesa=" + idMesa + ", estado=" + estado + "capacidad: " + capacidad;
+        return "ID: " + idMesa + ", estado " + estado + ", capacidad: " + capacidad;
     }
 
     @Override

@@ -46,7 +46,6 @@
                   <Image iconType="3" name="/restog6/resources/exitIcon11.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Salir"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiSalirActionPerformed"/>
@@ -66,7 +65,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Franklin Gothic Medium" size="18" style="1"/>
             </Property>
-            <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jtmMesero">
@@ -78,7 +76,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Mesero"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jmiMesa">
@@ -90,7 +87,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Mesa"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiMesaActionPerformed"/>
@@ -105,7 +101,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Producto"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -122,7 +117,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Franklin Gothic Medium" size="18" style="1"/>
             </Property>
-            <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu2ActionPerformed"/>
@@ -137,7 +131,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ordenar"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jmiReservar">
@@ -149,7 +142,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Reservar"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -166,7 +158,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Franklin Gothic Medium" size="18" style="1"/>
             </Property>
-            <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jmiStock">
@@ -178,7 +169,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Stock"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiStockActionPerformed"/>
@@ -193,7 +183,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Meseros"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiConMeseroActionPerformed"/>
@@ -208,7 +197,6 @@
                   <Font name="Franklin Gothic Medium" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Mesas"/>
-                <Property name="opaque" type="boolean" value="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -250,6 +238,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JDesktopPane" name="jDesktopPane1">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">
