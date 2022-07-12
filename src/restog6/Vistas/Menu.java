@@ -123,6 +123,11 @@ public class Menu extends javax.swing.JFrame {
         jmiOrdenar.setBackground(new java.awt.Color(255, 255, 255));
         jmiOrdenar.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiOrdenar.setText("Ordenar");
+        jmiOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiOrdenarActionPerformed(evt);
+            }
+        });
         jMenu2.add(jmiOrdenar);
 
         jmiReservar.setBackground(new java.awt.Color(255, 255, 255));
@@ -205,6 +210,15 @@ public class Menu extends javax.swing.JFrame {
     private void jmiSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSalirActionPerformed
        dispose();
     }//GEN-LAST:event_jmiSalirActionPerformed
+
+    private void jmiOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiOrdenarActionPerformed
+        PedidoView pv = new PedidoView(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(pv);
+        jDesktopPane1.moveToFront(pv);
+        jDesktopPane1.repaint();
+        pv.setVisible(true);
+    }//GEN-LAST:event_jmiOrdenarActionPerformed
 
     /**
      * @param args the command line arguments
