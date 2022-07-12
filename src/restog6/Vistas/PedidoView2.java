@@ -38,9 +38,10 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         llenarCabeceraTable();
         this.pedido = pedido;
         this.jbEliminar.setEnabled(false);
-        llenarProductoJCB();
-        llenarCantidadJCB();
-        calcularTotal();
+        this.jbAgregar.setEnabled(false);
+        //llenarProductoJCB();
+        //llenarCantidadJCB();
+        //calcularTotal();
     }
 
     //                                          METODOS PRIVADOS
@@ -227,7 +228,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Debe seleccionar uno de los pedidos de la lista");
         }
         llenarTable();
-        calcularTotal();
+        //calcularTotal();
     }//GEN-LAST:event_jbEliminarActionPerformed
 
     //-------------  [BOTON AGREGAR]  -----------------
@@ -235,15 +236,15 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         DetallePedido dp = new DetallePedido();
         dp.setPedido(pedido);
         dp.setActivo(true);
-        dp.setProducto((Producto)jcbProducto.getSelectedItem());
-        dp.setCantidad((int)jcbCantidad.getSelectedItem());
-        if (detalleD.agregarDetallePedido(dp)){
-            JOptionPane.showMessageDialog(this, "Se agrego el pedido con exito!");
-        } else {
-            JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
-        }
+//        dp.setProducto((Producto)jcbProducto.getSelectedItem());
+//        dp.setCantidad((int)jcbCantidad.getSelectedItem());
+//        if (detalleD.agregarDetallePedido(dp)){
+//            JOptionPane.showMessageDialog(this, "Se agrego el pedido con exito!");
+//        } else {
+//            JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
+//        }
         llenarTable();
-        calcularTotal();
+        //calcularTotal();
     }//GEN-LAST:event_jbAgregarActionPerformed
 
     //-------------  [BOTON FINALIZAR]  ---------------
@@ -253,6 +254,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
         }
+        dispose();
     }//GEN-LAST:event_jbFinalizarActionPerformed
 
     private void jtPedidoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPedidoFocusGained

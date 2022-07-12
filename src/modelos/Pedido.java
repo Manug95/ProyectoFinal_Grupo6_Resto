@@ -2,6 +2,7 @@
 package modelos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Grupo 6 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
  */
 public class Pedido {
     private int idPedido;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private boolean pagado;
     private Mesa mesa; 
     private Mesero mesero;
@@ -19,14 +20,14 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(LocalDate fecha, boolean pagado, Mesa mesa, Mesero mesero) {
+    public Pedido(LocalDateTime fecha, boolean pagado, Mesa mesa, Mesero mesero) {
         this.fecha = fecha;
         this.pagado = pagado;
         this.mesa = mesa;
         this.mesero = mesero;
     }
 
-    public Pedido(int idPedido, LocalDate fecha, boolean pagado, Mesa mesa, Mesero mesero) {
+    public Pedido(int idPedido, LocalDateTime fecha, boolean pagado, Mesa mesa, Mesero mesero) {
         this.idPedido = idPedido;
         this.fecha = fecha;
         this.pagado = pagado;
@@ -42,11 +43,11 @@ public class Pedido {
         this.idPedido = idPedido;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class PedidoData {
                 pedido = new Pedido();
                 pedido.setIdPedido(rs.getInt("idPedido"));
                 pedido.setPagado(rs.getBoolean("pagado"));
-                LocalDate fecha = rs.getDate("horaFecha").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDateTime fecha = rs.getDate("horaFecha").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 pedido.setFecha(fecha);
                 pedido.setMesa(mesaD.getMesaPorId(rs.getInt("idMesa")));
                 pedido.setMesero(meseroD.obtenerMesero(rs.getInt("idMesero")));
@@ -90,7 +91,7 @@ public class PedidoData {
             ps.setInt(1, pedido.getMesa().getIdMesa());
             ps.setInt(2, pedido.getMesero().getIdMesero());
             
-            ps.setDate(3, Date.valueOf(pedido.getFecha()));
+            ps.setDate(3, Date.valueOf(pedido.getFecha().toLocalDate()));
             ps.setBoolean(4, pedido.isPagado());
             ps.setInt(5, pedido.getIdPedido());
             if (ps.executeUpdate() != 0){
@@ -116,7 +117,7 @@ public class PedidoData {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, pedido.getMesa().getIdMesa());
             ps.setInt(2, pedido.getMesero().getIdMesero());
-            ps.setDate(3, Date.valueOf(pedido.getFecha()));
+            ps.setDate(3, Date.valueOf(pedido.getFecha().toLocalDate()));
             ps.setBoolean(4, pedido.isPagado());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();

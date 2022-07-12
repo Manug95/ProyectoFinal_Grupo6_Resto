@@ -11,6 +11,7 @@ import data.MesaData;
 import data.MeseroData;
 import data.ReservaData;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import modelos.DetallePedido;
 import modelos.Mesa;
@@ -36,7 +37,7 @@ public class PedidoView extends javax.swing.JInternalFrame {
         reservaD = new ReservaData(con);
         meseroD = new MeseroData(con);
         llenarReservaJCB(reservaD.getReservasActivas());
-        llenarMeseroJCB((ArrayList)meseroD.obtenerMeseros());
+        llenarMeseroJCB((ArrayList)meseroD.todosLosMeseros());
     }
 
     //                                          METODOS PRIVADOS
@@ -158,7 +159,7 @@ public class PedidoView extends javax.swing.JInternalFrame {
         Menu.jDesktopPane1.removeAll();
         Menu.jDesktopPane1.repaint();
         Pedido pedido = new Pedido();
-        pedido.setFecha(LocalDate.now());
+        pedido.setFecha(LocalDate.now().atTime(LocalTime.now()));
         pedido.setPagado(false);
         pedido.setMesero((Mesero)jcbMesero.getSelectedItem());
         pedido.setMesa(((Reserva)jcbReserva.getSelectedItem()).getMesa());
