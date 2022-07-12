@@ -93,7 +93,7 @@ public class MeseroData {
     public boolean modificarMesero(Mesero unMesero){
         boolean modificado = false;        
         String sql = "UPDATE mesero "
-                   + "SET nombre = ?, apellido = ?, dni = ?, telefono = ?, estado = ? "
+                   + "SET nombreMesero = ?, apellido = ?, dni = ?, telefono = ?, estado = ? "
                    + "WHERE idMesero = ?";        
         try{
             PreparedStatement ps = conexion.prepareStatement(sql);            
@@ -127,7 +127,7 @@ public class MeseroData {
             while(result.next()){
                 unMesero = new Mesero();
                 unMesero.setIdMesero(result.getInt("idMesero"));
-                unMesero.setNombreMesero(result.getString("nombre"));
+                unMesero.setNombreMesero(result.getString("nombreMesero"));
                 unMesero.setApellido(result.getString("apellido"));
                 unMesero.setDni(result.getString("dni"));
                 unMesero.setTelefono(result.getString("telefono"));
@@ -139,6 +139,31 @@ public class MeseroData {
             JOptionPane.showMessageDialog(null, "Error al obtener la lista de meseros");
         }        
         return meseros;
+    }
+    
+    public Mesero obtenerMesero(int id){
+        Mesero unMesero = null;        
+        String sql = "SELECT * "
+                   + "FROM mesero "
+                   + "WHERE idMesero = ? AND activo = 1;";        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);            
+            ps.setInt(1, id);            
+            ResultSet result = ps.executeQuery();            
+            if(result.next()){
+                unMesero = new Mesero();
+                unMesero.setIdMesero(result.getInt("idMesero"));
+                unMesero.setNombreMesero(result.getString("nombreMesero"));
+                unMesero.setApellido(result.getString("apellido"));
+                unMesero.setDni(result.getString("dni"));
+                unMesero.setTelefono(result.getString("telefono"));
+                unMesero.setActivo(result.getBoolean("activo"));
+            }            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al Obtener un mesero con ID = " + id + "!");
+        }        
+        return unMesero;
     }
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
