@@ -2,6 +2,7 @@
 package modelos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Grupo 6
@@ -14,7 +15,7 @@ public class Reserva {
     //---------------------------------------------------------------------------------------------------------------
     private int idReserva;
     private Mesa mesa;
-    private LocalDate fechaReserva;
+    private LocalDateTime fechaReserva;
     private String dniCliente;
     private String nombreCliente;
     private boolean activo;
@@ -23,7 +24,7 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Mesa mesa, LocalDate fechaReserva, String dniCliente, String nombreCliente, boolean activo) {
+    public Reserva(Mesa mesa, LocalDateTime fechaReserva, String dniCliente, String nombreCliente, boolean activo) {
         this.mesa = mesa;
         this.fechaReserva = fechaReserva;
         this.dniCliente = dniCliente;
@@ -31,7 +32,7 @@ public class Reserva {
         this.activo = activo;
     }
 
-    public Reserva(int idReserva, Mesa mesa, LocalDate fechaReserva, String dniCliente, String nombreCliente, boolean activo) {
+    public Reserva(int idReserva, Mesa mesa, LocalDateTime fechaReserva, String dniCliente, String nombreCliente, boolean activo) {
         this.idReserva = idReserva;
         this.mesa = mesa;
         this.fechaReserva = fechaReserva;
@@ -56,11 +57,11 @@ public class Reserva {
         this.mesa = mesa;
     }
 
-    public LocalDate getFechaReserva() {
+    public LocalDateTime getFechaReserva() {
         return fechaReserva;
     }
 
-    public void setFechaReserva(LocalDate fechaReserva) {
+    public void setFechaReserva(LocalDateTime fechaReserva) {
         this.fechaReserva = fechaReserva;
     }
 

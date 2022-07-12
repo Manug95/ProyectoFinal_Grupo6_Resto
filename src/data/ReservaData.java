@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelos.Reserva;
@@ -47,7 +49,20 @@ public class ReservaData {
             PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
             ps.setInt(1, nuevaReserva.getMesa().getIdMesa());
-            ps.setDate(2, Date.valueOf(nuevaReserva.getFechaReserva()));
+            
+            //ps.setDate(2, Date.valueOf(nuevaReserva.getFechaReserva()));
+            
+//            LocalDate ld = nuevaReserva.getFechaReserva().toLocalDate();
+//            JOptionPane.showMessageDialog(null, ld);
+//            LocalTime lt = nuevaReserva.getFechaReserva().toLocalTime();
+//            JOptionPane.showMessageDialog(null, lt);
+//            LocalDateTime ldt = LocalDateTime.of(ld, lt);
+//            JOptionPane.showMessageDialog(null, ldt);
+            Timestamp ts = Timestamp.valueOf(nuevaReserva.getFechaReserva());
+//            JOptionPane.showMessageDialog(null, ts);
+            
+            ps.setTimestamp(2, ts);
+            
             ps.setString(3, nuevaReserva.getDniCliente());
             ps.setString(4, nuevaReserva.getNombreCliente());
             ps.setBoolean(5, nuevaReserva.isActivo());
@@ -63,7 +78,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Agregar la Reserva!");
+            JOptionPane.showMessageDialog(null, "Error al Agregar la Reserva!" + sqle);
         }
         
         return agregada;
@@ -91,7 +106,11 @@ public class ReservaData {
                 
                 reserva.setIdReserva(result.getInt("idReserva"));
                 reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
-                reserva.setFechaReserva(result.getDate("fechaReserva").toLocalDate());
+                
+                //reserva.setFechaReserva(result.getDate("fechaReserva").toLocalDate());
+//                LocalDateTime ldt = result.getTimestamp("fechaReserva").toLocalDateTime();
+                reserva.setFechaReserva(result.getTimestamp("fechaReserva").toLocalDateTime());
+                
                 reserva.setDniCliente(result.getString("dniCliente"));
                 reserva.setNombreCliente(result.getString("nombreCliente"));
                 reserva.setActivo(result.getBoolean("activo"));
@@ -119,7 +138,8 @@ public class ReservaData {
         
         try(PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setInt(1, reserva.getMesa().getIdMesa());
-            ps.setDate(2, Date.valueOf(reserva.getFechaReserva()));
+            ps.setTimestamp(2, Timestamp.valueOf(reserva.getFechaReserva()));
+            //ps.setDate(2, Date.valueOf(reserva.getFechaReserva()));
             ps.setString(3, reserva.getDniCliente());
             ps.setString(4, reserva.getNombreCliente());
             ps.setBoolean(5, reserva.isActivo());
@@ -186,7 +206,10 @@ public class ReservaData {
                 
                 reserva.setIdReserva(result.getInt("idReserva"));
                 reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
-                reserva.setFechaReserva(result.getDate("fechaReserva").toLocalDate());
+                
+                LocalDateTime ldt = result.getTimestamp("fechaReserva").toLocalDateTime();
+                reserva.setFechaReserva(ldt);
+                
                 reserva.setDniCliente(result.getString("dniCliente"));
                 reserva.setNombreCliente(result.getString("nombreCliente"));
                 reserva.setActivo(result.getBoolean("activo"));
@@ -200,6 +223,40 @@ public class ReservaData {
         }
         
         return reservas;
+    }
+    
+    /**
+     * Trae la Reserva de una mesa en Tal Día
+     * @param idMesa id de la mesa
+     * @param fecha de la reserva
+     * @return true si hay una reserva en esa mesa en ese día, false si no hay ninguna reserva
+     */
+    public boolean getReservaDeMesaXFecha(int idMesa, LocalDateTime fecha){
+        boolean hayReserva = false;
+        
+        String sql = "SELECT * "
+                   + "FROM reserva "
+                   + "WHERE idMesa = ? AND fechaReserva = ? AND activo = 1;";
+        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            
+            ps.setInt(1, idMesa);
+            ps.setTimestamp(2, Timestamp.valueOf(fecha));
+//            ps.setDate(2, Date.valueOf(fecha));
+            
+            ResultSet result = ps.executeQuery();
+            
+            if(result.next()){
+                hayReserva = true;
+            }
+            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error!" + sqle);
+        }
+        
+        return hayReserva;
     }
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
