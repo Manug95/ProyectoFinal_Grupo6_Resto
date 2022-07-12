@@ -133,6 +133,11 @@ public class Menu extends javax.swing.JFrame {
         jmiReservar.setBackground(new java.awt.Color(255, 255, 255));
         jmiReservar.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiReservar.setText("Reservar");
+        jmiReservar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiReservarActionPerformed(evt);
+            }
+        });
         jMenu2.add(jmiReservar);
 
         jMenuBar1.add(jMenu2);
@@ -219,6 +224,15 @@ public class Menu extends javax.swing.JFrame {
         jDesktopPane1.repaint();
         pv.setVisible(true);
     }//GEN-LAST:event_jmiOrdenarActionPerformed
+
+    private void jmiReservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiReservarActionPerformed
+        ReservaView rv = new ReservaView(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(rv);
+        jDesktopPane1.moveToFront(rv);
+        jDesktopPane1.repaint();
+        rv.setVisible(true);
+    }//GEN-LAST:event_jmiReservarActionPerformed
 
     /**
      * @param args the command line arguments
