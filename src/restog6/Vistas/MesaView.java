@@ -12,6 +12,11 @@ import data.MesaData;
  */
 public class MesaView extends javax.swing.JInternalFrame {
     private MesaData mesaData;
+    
+    private MesaView_Agregar ventanaAgregar = null;
+    private MesaView_Modificar ventanaModificar = null;
+    private MesaView_HabilitacionesMesa ventanaHabilitaciones = null;
+    
     /**
      * Creates new form MesaView
      */
@@ -137,27 +142,113 @@ public class MesaView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jbAgregarMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAgregarMesaActionPerformed
-        MesaView_Agregar ventanaAgregar = new MesaView_Agregar(mesaData);
+        if(ventanaAgregar == null){
+            ventanaAgregar = new MesaView_Agregar(mesaData);
+            
+            if(ventanaModificar != null){
+                ventanaModificar.dispose();
+                ventanaModificar = null;
+            }
+            
+            if(ventanaHabilitaciones != null){
+                ventanaHabilitaciones.dispose();
+                ventanaHabilitaciones = null;
+            }
         
-        Menu.jDesktopPane1.add(ventanaAgregar);
-        ventanaAgregar.toFront();
-        ventanaAgregar.setVisible(true);
+            Menu.jDesktopPane1.add(ventanaAgregar);
+            ventanaAgregar.toFront();
+            ventanaAgregar.setVisible(true);
+        }else{
+            ventanaAgregar.dispose();
+            
+            if(ventanaModificar != null){
+                ventanaModificar.dispose();
+                ventanaModificar = null;
+            }
+            
+            if(ventanaHabilitaciones != null){
+                ventanaHabilitaciones.dispose();
+                ventanaHabilitaciones = null;
+            }
+            
+            ventanaAgregar = new MesaView_Agregar(mesaData);
+            
+            Menu.jDesktopPane1.add(ventanaAgregar);
+            ventanaAgregar.toFront();
+            ventanaAgregar.setVisible(true);
+        }
     }//GEN-LAST:event_jbAgregarMesaActionPerformed
 
     private void jbModificarMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMesaActionPerformed
-        MesaView_Modificar ventanaModificar = new MesaView_Modificar(mesaData);
+        if(ventanaModificar == null){
+            ventanaModificar = new MesaView_Modificar(mesaData);
+            
+            if(ventanaAgregar != null){
+                ventanaAgregar.dispose();
+                ventanaAgregar = null;
+            }
+            if(ventanaHabilitaciones != null){
+                ventanaHabilitaciones.dispose();
+                ventanaHabilitaciones = null;
+            }
         
-        Menu.jDesktopPane1.add(ventanaModificar);
-        ventanaModificar.toFront();
-        ventanaModificar.setVisible(true);
+            Menu.jDesktopPane1.add(ventanaModificar);
+            ventanaModificar.toFront();
+            ventanaModificar.setVisible(true);
+        }else{
+            ventanaModificar.dispose();
+            
+            if(ventanaAgregar != null){
+                ventanaAgregar.dispose();
+                ventanaAgregar = null;
+            }
+            if(ventanaHabilitaciones != null){
+                ventanaHabilitaciones.dispose();
+                ventanaHabilitaciones = null;
+            }
+            
+            ventanaModificar = new MesaView_Modificar(mesaData);
+        
+            Menu.jDesktopPane1.add(ventanaModificar);
+            ventanaModificar.toFront();
+            ventanaModificar.setVisible(true);
+        }
     }//GEN-LAST:event_jbModificarMesaActionPerformed
 
     private void jbHabilitarDeshabilitarMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHabilitarDeshabilitarMesaActionPerformed
-        MesaView_HabilitacionesMesa ventanaHabilitaciones = new MesaView_HabilitacionesMesa(mesaData);
+        if(ventanaHabilitaciones == null){
+            ventanaHabilitaciones = new MesaView_HabilitacionesMesa(mesaData);
+            
+            if(ventanaAgregar != null){
+                ventanaAgregar.dispose();
+                ventanaAgregar = null;
+            }
+            if(ventanaModificar != null){
+                ventanaModificar.dispose();
+                ventanaModificar = null;
+            }
         
-        Menu.jDesktopPane1.add(ventanaHabilitaciones);
-        ventanaHabilitaciones.toFront();
-        ventanaHabilitaciones.setVisible(true);
+            Menu.jDesktopPane1.add(ventanaHabilitaciones);
+            ventanaHabilitaciones.toFront();
+            ventanaHabilitaciones.setVisible(true);
+        }else{
+            ventanaHabilitaciones.dispose();
+            
+            if(ventanaAgregar != null){
+                ventanaAgregar.dispose();
+                ventanaAgregar = null;
+            }
+            if(ventanaModificar != null){
+                ventanaModificar.dispose();
+                ventanaModificar = null;
+            }
+            
+            ventanaHabilitaciones = new MesaView_HabilitacionesMesa(mesaData);
+        
+            Menu.jDesktopPane1.add(ventanaHabilitaciones);
+            ventanaHabilitaciones.toFront();
+            ventanaHabilitaciones.setVisible(true);
+        }
     }//GEN-LAST:event_jbHabilitarDeshabilitarMesaActionPerformed
 
 

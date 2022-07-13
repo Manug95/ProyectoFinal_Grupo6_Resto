@@ -7,8 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelos.Reserva;
@@ -42,30 +44,22 @@ public class ReservaData {
     public boolean agregarReserva(Reserva nuevaReserva){
         boolean agregada = false;
         
-        String sql = "INSERT INTO reserva(idMesa, fechaReserva, dniCliente, nombreCliente, activo)"
-                   + "VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO reserva(idMesa, fechaReserva, horaReserva, dniCliente, nombreCliente, activo)"
+                   + "VALUES (?, ?, ?, ?, ?, ?);";
         
         try{
             PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
             ps.setInt(1, nuevaReserva.getMesa().getIdMesa());
             
-            //ps.setDate(2, Date.valueOf(nuevaReserva.getFechaReserva()));
+            LocalDate ld = nuevaReserva.getFechaReserva().toLocalDate();
+            LocalTime lt = nuevaReserva.getFechaReserva().toLocalTime();            
+            ps.setDate(2, Date.valueOf(ld));
+            ps.setTime(3, Time.valueOf(lt));
             
-//            LocalDate ld = nuevaReserva.getFechaReserva().toLocalDate();
-//            JOptionPane.showMessageDialog(null, ld);
-//            LocalTime lt = nuevaReserva.getFechaReserva().toLocalTime();
-//            JOptionPane.showMessageDialog(null, lt);
-//            LocalDateTime ldt = LocalDateTime.of(ld, lt);
-//            JOptionPane.showMessageDialog(null, ldt);
-            Timestamp ts = Timestamp.valueOf(nuevaReserva.getFechaReserva());
-//            JOptionPane.showMessageDialog(null, ts);
-            
-            ps.setTimestamp(2, ts);
-            
-            ps.setString(3, nuevaReserva.getDniCliente());
-            ps.setString(4, nuevaReserva.getNombreCliente());
-            ps.setBoolean(5, nuevaReserva.isActivo());
+            ps.setString(4, nuevaReserva.getDniCliente());
+            ps.setString(5, nuevaReserva.getNombreCliente());
+            ps.setBoolean(6, nuevaReserva.isActivo());
             
             ps.executeUpdate();
             
@@ -107,9 +101,9 @@ public class ReservaData {
                 reserva.setIdReserva(result.getInt("idReserva"));
                 reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
                 
-                //reserva.setFechaReserva(result.getDate("fechaReserva").toLocalDate());
-//                LocalDateTime ldt = result.getTimestamp("fechaReserva").toLocalDateTime();
-                reserva.setFechaReserva(result.getTimestamp("fechaReserva").toLocalDateTime());
+                LocalDate ld = result.getDate("fechaReserva").toLocalDate();
+                LocalTime lt = result.getTime("horaReserva").toLocalTime();
+                reserva.setFechaReserva(LocalDateTime.of(ld, lt));
                 
                 reserva.setDniCliente(result.getString("dniCliente"));
                 reserva.setNombreCliente(result.getString("nombreCliente"));
@@ -133,17 +127,21 @@ public class ReservaData {
         boolean modificada = false;
         
         String sql = "UPDATE reserva "
-                   + "SET idMesa = ?, fechaReserva = ?, dniCliente = ?, nombreCliente = ?, activo = ? "
+                   + "SET idMesa = ?, fechaReserva = ?, horaReserva = ?, dniCliente = ?, nombreCliente = ?, activo = ? "
                    + "WHERE idReserva = ?;";
         
         try(PreparedStatement ps = conexion.prepareStatement(sql)){
             ps.setInt(1, reserva.getMesa().getIdMesa());
-            ps.setTimestamp(2, Timestamp.valueOf(reserva.getFechaReserva()));
-            //ps.setDate(2, Date.valueOf(reserva.getFechaReserva()));
-            ps.setString(3, reserva.getDniCliente());
-            ps.setString(4, reserva.getNombreCliente());
-            ps.setBoolean(5, reserva.isActivo());
-            ps.setInt(6, reserva.getIdReserva());
+            
+            LocalDate ld = reserva.getFechaReserva().toLocalDate();
+            LocalTime lt = reserva.getFechaReserva().toLocalTime();            
+            ps.setDate(2, Date.valueOf(ld));
+            ps.setTime(3, Time.valueOf(lt));
+            
+            ps.setString(4, reserva.getDniCliente());
+            ps.setString(5, reserva.getNombreCliente());
+            ps.setBoolean(6, reserva.isActivo());
+            ps.setInt(7, reserva.getIdReserva());
             
             if(ps.executeUpdate() != 0){
                 modificada = true;
@@ -151,7 +149,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Modificar la Reserva!");
+            JOptionPane.showMessageDialog(null, "Error al Modificar la Reserva!" + sqle);
         }
         
         return modificada;
@@ -207,8 +205,9 @@ public class ReservaData {
                 reserva.setIdReserva(result.getInt("idReserva"));
                 reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
                 
-                LocalDateTime ldt = result.getTimestamp("fechaReserva").toLocalDateTime();
-                reserva.setFechaReserva(ldt);
+                LocalDate ld = result.getDate("fechaReserva").toLocalDate();
+                LocalTime lt = result.getTime("horaReserva").toLocalTime();
+                reserva.setFechaReserva(LocalDateTime.of(ld, lt));
                 
                 reserva.setDniCliente(result.getString("dniCliente"));
                 reserva.setNombreCliente(result.getString("nombreCliente"));
@@ -236,14 +235,14 @@ public class ReservaData {
         
         String sql = "SELECT * "
                    + "FROM reserva "
-                   + "WHERE idMesa = ? AND fechaReserva = ? AND activo = 1;";
+                   + "WHERE idMesa = ? AND fechaReserva = ? AND horaReserva = ? AND activo = 1;";
         
         try{
             PreparedStatement ps = conexion.prepareStatement(sql);
             
             ps.setInt(1, idMesa);
-            ps.setTimestamp(2, Timestamp.valueOf(fecha));
-//            ps.setDate(2, Date.valueOf(fecha));
+            ps.setDate(2, Date.valueOf(fecha.toLocalDate()));
+            ps.setTime(3, Time.valueOf(fecha.toLocalTime()));
             
             ResultSet result = ps.executeQuery();
             

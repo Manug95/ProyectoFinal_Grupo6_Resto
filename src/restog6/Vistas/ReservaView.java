@@ -1,10 +1,12 @@
 
-
 package restog6.Vistas;
 
 import data.Conexion;
 import data.MesaData;
 import data.ReservaData;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,6 +25,9 @@ public class ReservaView extends javax.swing.JInternalFrame {
     private ReservaData reservaData;
     private ArrayList<Reserva> listaReservas;
     private DefaultTableModel modeloTabla;
+    
+    private ReservaView_Reservar ventanaReservar = null;
+    private ReservaView_Modificar ventanaModificar = null;
     
     private Comparator<Reserva> compaID;
     
@@ -222,12 +227,31 @@ public class ReservaView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbNuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevaReservaActionPerformed
-        ReservaView_Reservar ventanaReservar = new ReservaView_Reservar(mesaData, reservaData);
+        if(ventanaReservar == null){
+            ventanaReservar = new ReservaView_Reservar(mesaData, reservaData);
+            
+            if(ventanaModificar != null){
+                ventanaModificar.dispose();
+                ventanaModificar = null;
+            }
         
-        Menu.jDesktopPane1.add(ventanaReservar);
-        ventanaReservar.toFront();
-        ventanaReservar.setVisible(true);
-
+            Menu.jDesktopPane1.add(ventanaReservar);
+            ventanaReservar.toFront();
+            ventanaReservar.setVisible(true);
+        }else{
+            ventanaReservar.dispose();
+            
+            if(ventanaModificar != null){
+                ventanaModificar.dispose();
+                ventanaModificar = null;
+            }
+            
+            ventanaReservar = new ReservaView_Reservar(mesaData, reservaData);
+        
+            Menu.jDesktopPane1.add(ventanaReservar);
+            ventanaReservar.toFront();
+            ventanaReservar.setVisible(true);
+        }
     }//GEN-LAST:event_jbNuevaReservaActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
@@ -235,7 +259,7 @@ public class ReservaView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbCancelarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarReservaActionPerformed
-        Reserva reservaSeleccionada;
+        //Reserva reservaSeleccionada;
         if(jtReservasActivas.getSelectedRow() != -1){
             int filaSelect = jtReservasActivas.getSelectedRow();
             
@@ -273,11 +297,33 @@ public class ReservaView extends javax.swing.JInternalFrame {
             
             Reserva reservaSeleccionada = reservaData.getReservaPorId(idReservaSeleccionada);
             
-            ReservaView_Modificar ventanaModificar = new ReservaView_Modificar(reservaData, mesaData, reservaSeleccionada);
+            if(ventanaModificar == null){
+                ventanaModificar = new ReservaView_Modificar(reservaData, mesaData, reservaSeleccionada);
+                
+                if(ventanaReservar != null){
+                    ventanaReservar.dispose();
+                    ventanaReservar = null;
+                }
             
-            Menu.jDesktopPane1.add(ventanaModificar);
-            ventanaModificar.toFront();
-            ventanaModificar.setVisible(true);
+                Menu.jDesktopPane1.add(ventanaModificar);
+                ventanaModificar.toFront();
+                ventanaModificar.setVisible(true);
+            }else{
+                ventanaModificar.dispose();
+                
+                if(ventanaReservar != null){
+                    ventanaReservar.dispose();
+                    ventanaReservar = null;
+                }
+                
+                ventanaModificar = new ReservaView_Modificar(reservaData, mesaData, reservaSeleccionada);
+            
+                Menu.jDesktopPane1.add(ventanaModificar);
+                ventanaModificar.toFront();
+                ventanaModificar.setVisible(true);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Seleccione una Reserva para Modificar!");
         }
         
     }//GEN-LAST:event_jbModificarReservaActionPerformed
@@ -340,11 +386,15 @@ public class ReservaView extends javax.swing.JInternalFrame {
         Collections.sort(listaReservas, compa);
         
         for(Reserva r : listaReservas){
-            String horaYFecha = r.getFechaReserva().toString();
-            horaYFecha = horaYFecha.replace("T", " ");
-            modeloTabla.addRow(new Object[]{
-                r.getIdReserva(), r.getNombreCliente(), r.getDniCliente(), horaYFecha, r.getMesa().getIdMesa()
-            });
+            if(reservaVigente(r)){
+                String horaYFecha = r.getFechaReserva().toString();
+                horaYFecha = horaYFecha.replace("T", " / ");
+                modeloTabla.addRow(new Object[]{
+                    r.getIdReserva(), r.getNombreCliente(), r.getDniCliente(), horaYFecha, r.getMesa().getIdMesa()
+                });
+            }else{
+                reservaData.borrarReserva(r.getIdReserva());
+            }
         }
     }
     
@@ -357,7 +407,35 @@ public class ReservaView extends javax.swing.JInternalFrame {
             modeloTabla.removeRow(i);
         }
     }
-
+    
+    /**
+     * Comprueba que la fecha y hora de una reserva no sean viejas
+     * @param reserva de la que se verifica la fecha y hora
+     * @return true si la reserva es vigente, si no, false
+     */
+    private boolean reservaVigente(Reserva reserva){//con compararlo con un LocalDateTime con la fecha y hora actuales bastaba!!!
+        boolean esVigente;
+        
+        LocalDateTime fReser = reserva.getFechaReserva();
+        LocalDate hoy = LocalDate.now();
+        LocalTime ahora = LocalTime.now();
+        
+        if(fReser.toLocalDate().isBefore(hoy)){//si la fecha de reserva es anterior al la fecha actual
+            esVigente = false;
+        }else{
+            if(!fReser.toLocalDate().isAfter(hoy)){//si la fecha de reserva NO es posterior a la fecha actual
+                if(fReser.toLocalTime().isBefore(ahora)){//si la hora de reserva es anterior a la hora actual
+                    esVigente = false;
+                }else{
+                    esVigente = true;
+                }
+            }else{
+                esVigente = true;
+            } 
+        }
+        
+        return esVigente;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

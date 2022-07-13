@@ -402,6 +402,37 @@ public class MesaData {
 
         return mesas;
     }
+    
+    /**
+     * Modifica el Estado de una Mesa en particular
+     * @param id de la Mesa a la que se le modifica el Estado
+     * @param estado es el nuevo Estado que va a ser seteado
+     * @return true si se modifico, si no, false
+     */
+    public boolean modificarEstadoDeMesa(int id, char estado){
+        boolean modificado = false;
+        
+        String sql = "UPDATE mesa "
+                   + "SET estado = ? "
+                   + "WHERE idMesa = ?;";
+        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            
+            ps.setString(1, estado+"");
+            ps.setInt(2, id);
+            
+            if(ps.executeUpdate() != 0){
+                modificado = true;
+            }
+            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al Modificar el Estado!" + sqle);
+        }
+        
+        return modificado;
+    }
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
 }

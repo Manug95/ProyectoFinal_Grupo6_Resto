@@ -183,7 +183,7 @@ public class ReservaView_Reservar extends javax.swing.JInternalFrame {
                 
                 if(validarNombre(jtfNombreCliente.getText())){
                     
-                    if(validarCadenaNumerica(jtfDniCliente.getText())){
+                    if(validarCadenaNumerica(jtfDniCliente.getText()) && jtfDniCliente.getText().length() == 8){
                         //una vez pasado el filtro, se procede con la reserva
                         Mesa mesaSeleccionada = (Mesa)jcbMesas.getSelectedItem();
             
@@ -210,7 +210,11 @@ public class ReservaView_Reservar extends javax.swing.JInternalFrame {
                             JOptionPane.showMessageDialog(this, "Hora Incorrecta! Está Fuera del Horario de Atención!");
                         }
                     }else{
-                        JOptionPane.showMessageDialog(this, "El DNI Debe ser un Número!");
+                        if(jtfDniCliente.getText().length() != 8){
+                            JOptionPane.showMessageDialog(this, "DNI incorrecto!");
+                        }else{
+                            JOptionPane.showMessageDialog(this, "El DNI Debe ser un Número!");
+                        }
                     }
                 }else{
                     JOptionPane.showMessageDialog(this, "Nombre del Cliente Invalido!");
