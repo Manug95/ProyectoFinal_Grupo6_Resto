@@ -35,6 +35,9 @@ public class MesaView extends javax.swing.JInternalFrame {
         jbModificarMesa = new javax.swing.JButton();
         jbHabilitarDeshabilitarMesa = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jlAgregarMesaNueva = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -73,17 +76,18 @@ public class MesaView extends javax.swing.JInternalFrame {
             }
         });
 
+        jlAgregarMesaNueva.setText("Agregar un Mesa Nueva");
+
+        jLabel1.setText("Modificar una Mesa");
+
+        jLabel2.setText("Habilitar o Deshabilitar una Mesa");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jbHabilitarDeshabilitarMesa)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(125, 125, 125)
@@ -92,18 +96,33 @@ public class MesaView extends javax.swing.JInternalFrame {
                             .addGap(173, 173, 173)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jbAgregarMesa, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jbModificarMesa, javax.swing.GroupLayout.Alignment.LEADING)))))
+                                .addComponent(jbModificarMesa, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jlAgregarMesaNueva, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2)
+                        .addComponent(jbHabilitarDeshabilitarMesa)))
                 .addContainerGap(128, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jlTitulo)
-                .addGap(51, 51, 51)
+                .addGap(26, 26, 26)
+                .addComponent(jlAgregarMesaNueva)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbAgregarMesa)
-                .addGap(42, 42, 42)
+                .addGap(22, 22, 22)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbModificarMesa)
-                .addGap(46, 46, 46)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbHabilitarDeshabilitarMesa)
                 .addGap(34, 34, 34)
                 .addComponent(jButton4)
@@ -144,9 +163,12 @@ public class MesaView extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JButton jbAgregarMesa;
     private javax.swing.JButton jbHabilitarDeshabilitarMesa;
     private javax.swing.JButton jbModificarMesa;
+    private javax.swing.JLabel jlAgregarMesaNueva;
     private javax.swing.JLabel jlTitulo;
     // End of variables declaration//GEN-END:variables
 }

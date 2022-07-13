@@ -26,23 +26,23 @@
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="jbGuardarCambios" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
                       <Component id="jbCancelar" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jlNumeroMesa" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jlFecha" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jlHora" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlHora" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jdcFecha" pref="193" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jtfHora" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
-                          <Component id="jcbMesas" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jcbMesas" alignment="0" min="-2" pref="193" max="-2" attributes="0"/>
+                          <Component id="jdcFecha" alignment="0" min="-2" pref="159" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -90,7 +90,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jlNumeroMesa">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Nro Mesa"/>
+        <Property name="text" type="java.lang.String" value="Mesa"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jlFecha">

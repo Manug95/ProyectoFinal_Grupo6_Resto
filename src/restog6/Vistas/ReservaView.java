@@ -6,6 +6,8 @@ import data.Conexion;
 import data.MesaData;
 import data.ReservaData;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Reserva;
@@ -22,6 +24,8 @@ public class ReservaView extends javax.swing.JInternalFrame {
     private ArrayList<Reserva> listaReservas;
     private DefaultTableModel modeloTabla;
     
+    private Comparator<Reserva> compaID;
+    
     /** Creates new form ReservaView */
     public ReservaView(Conexion conexion) {
         initComponents();
@@ -33,7 +37,23 @@ public class ReservaView extends javax.swing.JInternalFrame {
         this.modeloTabla = new DefaultTableModel();
         
         armarTabla();
-        cargarReservasEnTabla();
+        
+        compaID = new Comparator<Reserva>(){
+            @Override
+            public int compare(Reserva r, Reserva r1){
+                if(r.getIdReserva() < r1.getIdReserva()){
+                    return -1;
+                }else{
+                    if(r.getIdReserva() > r1.getIdReserva()){
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                }
+            }
+        };
+        
+        cargarReservasEnTabla(compaID);
     }
 
     /** This method is called from within the constructor to
@@ -54,6 +74,9 @@ public class ReservaView extends javax.swing.JInternalFrame {
         jbCancelarReserva = new javax.swing.JButton();
         jbRefrescarTabla = new javax.swing.JButton();
         jbModificarReserva = new javax.swing.JButton();
+        jbNombreCliente = new javax.swing.JButton();
+        jbFechaReserva = new javax.swing.JButton();
+        jlOrdenarPor = new javax.swing.JLabel();
 
         setResizable(true);
 
@@ -107,7 +130,7 @@ public class ReservaView extends javax.swing.JInternalFrame {
         jbRefrescarTabla.setText("Refrescar Tabla");
         jbRefrescarTabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbRefrescarTablaActionPerformed(evt);
+                refrescarTabla(evt);
             }
         });
 
@@ -118,53 +141,81 @@ public class ReservaView extends javax.swing.JInternalFrame {
             }
         });
 
+        jbNombreCliente.setText("Nombre Cliente");
+        jbNombreCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNombreClienteActionPerformed(evt);
+            }
+        });
+
+        jbFechaReserva.setText("Fecha Reserva");
+        jbFechaReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFechaReservaActionPerformed(evt);
+            }
+        });
+
+        jlOrdenarPor.setText("Ordenar Por");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(204, 204, 204)
-                        .addComponent(jlReservasActivas)
-                        .addGap(33, 33, 33)
-                        .addComponent(jbRefrescarTabla))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
-                        .addComponent(jlReservaMesas)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(28, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jbNuevaReserva)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbCancelarReserva)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbModificarReserva)
-                        .addGap(27, 27, 27)
-                        .addComponent(jbCancelar)))
-                .addGap(29, 29, 29))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jlReservasActivas)
+                        .addGap(69, 69, 69)
+                        .addComponent(jbRefrescarTabla)
+                        .addGap(65, 65, 65))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jlOrdenarPor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jbNombreCliente)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jbFechaReserva))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jbNuevaReserva)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jbCancelarReserva)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jbModificarReserva)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(jbCancelar))))
+                        .addGap(29, 29, 29))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jlReservaMesas)
+                        .addGap(180, 180, 180))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jlReservaMesas)
-                .addGap(23, 23, 23)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlReservasActivas)
-                    .addComponent(jbRefrescarTabla))
+                    .addComponent(jbRefrescarTabla)
+                    .addComponent(jlReservasActivas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbFechaReserva)
+                    .addComponent(jbNombreCliente)
+                    .addComponent(jlOrdenarPor))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbNuevaReserva)
                     .addComponent(jbCancelar)
+                    .addComponent(jbModificarReserva)
                     .addComponent(jbCancelarReserva)
-                    .addComponent(jbModificarReserva))
-                .addContainerGap(39, Short.MAX_VALUE))
+                    .addComponent(jbNuevaReserva))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -195,7 +246,7 @@ public class ReservaView extends javax.swing.JInternalFrame {
                 if(reservaData.borrarReserva(idReserva)){
                     JOptionPane.showMessageDialog(this, "Reserva Cancelada!");
                     borrarFilasTabla();
-                    cargarReservasEnTabla();
+                    cargarReservasEnTabla(compaID);
                 }
             }
             
@@ -205,10 +256,10 @@ public class ReservaView extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jbCancelarReservaActionPerformed
 
-    private void jbRefrescarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbRefrescarTablaActionPerformed
+    private void refrescarTabla(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refrescarTabla
         borrarFilasTabla();
-        cargarReservasEnTabla();
-    }//GEN-LAST:event_jbRefrescarTablaActionPerformed
+        cargarReservasEnTabla(compaID);
+    }//GEN-LAST:event_refrescarTabla
 
     /**
      * Solo se puede modificar la mesa, la hora y el día
@@ -222,7 +273,6 @@ public class ReservaView extends javax.swing.JInternalFrame {
             
             Reserva reservaSeleccionada = reservaData.getReservaPorId(idReservaSeleccionada);
             
-            //CREAR LA VISTA MODIFICAR
             ReservaView_Modificar ventanaModificar = new ReservaView_Modificar(reservaData, mesaData, reservaSeleccionada);
             
             Menu.jDesktopPane1.add(ventanaModificar);
@@ -231,6 +281,36 @@ public class ReservaView extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_jbModificarReservaActionPerformed
+
+    private void jbNombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNombreClienteActionPerformed
+        borrarFilasTabla();
+        
+        cargarReservasEnTabla(new Comparator<Reserva>(){
+            @Override
+            public int compare(Reserva r, Reserva r1){
+                return r.getNombreCliente().compareTo(r1.getNombreCliente());
+            }
+        });
+    }//GEN-LAST:event_jbNombreClienteActionPerformed
+
+    private void jbFechaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFechaReservaActionPerformed
+        borrarFilasTabla();
+        
+        cargarReservasEnTabla(new Comparator<Reserva>(){
+            @Override
+            public int compare(Reserva r, Reserva r1){
+                if(r.getFechaReserva().isBefore(r1.getFechaReserva())){
+                    return -1;
+                }else{
+                    if(r.getFechaReserva().isAfter(r1.getFechaReserva())){
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                }
+            }
+        });
+    }//GEN-LAST:event_jbFechaReservaActionPerformed
 
     /**
      * Arma el Modelo de la Tabla
@@ -254,8 +334,10 @@ public class ReservaView extends javax.swing.JInternalFrame {
     /**
      * Llena la Tabla con las Reservas Activas
      */
-    private void cargarReservasEnTabla(){
+    private void cargarReservasEnTabla(Comparator compa){
         listaReservas = reservaData.getReservasActivas();
+        
+        Collections.sort(listaReservas, compa);
         
         for(Reserva r : listaReservas){
             String horaYFecha = r.getFechaReserva().toString();
@@ -281,9 +363,12 @@ public class ReservaView extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbCancelar;
     private javax.swing.JButton jbCancelarReserva;
+    private javax.swing.JButton jbFechaReserva;
     private javax.swing.JButton jbModificarReserva;
+    private javax.swing.JButton jbNombreCliente;
     private javax.swing.JButton jbNuevaReserva;
     private javax.swing.JButton jbRefrescarTabla;
+    private javax.swing.JLabel jlOrdenarPor;
     private javax.swing.JLabel jlReservaMesas;
     private javax.swing.JLabel jlReservasActivas;
     private javax.swing.JTable jtReservasActivas;

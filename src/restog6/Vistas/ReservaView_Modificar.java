@@ -46,7 +46,7 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
         int dia = reserva.getFechaReserva().getDayOfMonth();
         int hora = reserva.getFechaReserva().getHour();
         Date date = new Date(anio-1900, mes-1, dia, hora, 0, 0);
-        jdcFecha.setDate(date);//JOptionPane.showMessageDialog(this, jdcFecha.getDate());
+        jdcFecha.setDate(date);
         jtfHora.setText(hora+"");
     }
 
@@ -72,7 +72,7 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
         jlModificarReserva.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jlModificarReserva.setText("Modificar Reserva");
 
-        jlNumeroMesa.setText("Nro Mesa");
+        jlNumeroMesa.setText("Mesa");
 
         jlFecha.setText("Fecha");
 
@@ -104,21 +104,21 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
                 .addGap(99, 99, 99))
             .addGroup(layout.createSequentialGroup()
                 .addGap(58, 58, 58)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbGuardarCambios)
                         .addGap(73, 73, 73)
                         .addComponent(jbCancelar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlNumeroMesa)
-                            .addComponent(jlFecha)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jlNumeroMesa, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlFecha, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlHora))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jdcFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtfHora, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcbMesas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jcbMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(69, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -153,61 +153,46 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
 
     private void jbGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarCambiosActionPerformed
         if(!hayCamposVacios()){
-            if(validarHora()){
+            
+            if(validarCadenaNumerica(jtfHora.getText())){
                 //obtengo la hora nueva y la guardo en un LocalTime
                 int horaNueva = Integer.parseInt(jtfHora.getText());
+                if(horaNueva > 23){horaNueva = 0;}
                 LocalTime tiempo = LocalTime.of(horaNueva, 0, 0);
-                
+//JOptionPane.showMessageDialog(this, tiempo);
                 //obtengo la fecha Nueva y la guardo en un LocalDate
                 Date jDate = jdcFecha.getDate();
                 LocalDate fecha = LocalDate.of(jDate.getYear()+1900, jDate.getMonth()+1, jDate.getDate());
-                
+
                 //guardo la fecha y hora nueva en un LocalDateTime
-                LocalDateTime FechaCambiada = LocalDateTime.of(fecha, tiempo);
-                
-                reserva.setFechaReserva(FechaCambiada);
-                reserva.setMesa((Mesa)jcbMesas.getSelectedItem());
-                
-                if(reservaData.modificarReserva(reserva)){
-                    JOptionPane.showMessageDialog(this, "Reserva Modificada!");
-                    this.dispose();
-                }//MOSTRAR CARTEL DE CONFIRMACION
-                
-                //JOptionPane.showMessageDialog(this, cambios);
+                LocalDateTime fechaCambiada = LocalDateTime.of(fecha, tiempo);
+
+                if(validarHorario(fechaCambiada)){
+
+                    reserva.setMesa((Mesa)jcbMesas.getSelectedItem());
+
+                    //si la mesa seleccionada esta disponible a esa hora y fecha, se pre¿ocede a realizar la reserva
+                    if(!reservaData.getReservaDeMesaXFecha(reserva.getMesa().getIdMesa(), fechaCambiada)){
+
+                        reserva.setFechaReserva(fechaCambiada);
+
+                        if(reservaData.modificarReserva(reserva)){
+                            JOptionPane.showMessageDialog(this, "Reserva Modificada!");
+                            this.dispose();
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(this, "La Mesa Ya Esta Reservada para esa Fecha!");
+                    }
+
+                }else{
+                    JOptionPane.showMessageDialog(this, "Horario Incorrecto!");
+                }
             }
             
         }else{
             JOptionPane.showMessageDialog(this, "Hay Campos Vacíos!");
         }
     }//GEN-LAST:event_jbGuardarCambiosActionPerformed
-    
-    /**
-     * Valida lo Ingresado en el JTextField Nro Mesa
-     * @return true si está todo Bien, si no, false
-     */
-//    private boolean validarMesa(){
-//        boolean correcto;
-//        
-//        try{
-//            int n = Integer.parseInt(jtfNumeroMesa.getText());
-//            
-//            ArrayList<Integer> nroMesas = mesaData.getIdDeLasMesas();
-//            
-//            if(nroMesas.contains(n)){
-//                correcto = true;
-//            }else{
-//                JOptionPane.showMessageDialog(this, "No Existe esa Mesa!");
-//                correcto = false;
-//                //jtfNumeroMesa.requestFocus();
-//            }
-//        }catch(NumberFormatException nfe){
-//            JOptionPane.showMessageDialog(this, "Número de Mesa Incorrecto! Debe ser un Número!");
-//            correcto = false;
-//            //jtfNumeroMesa.requestFocus();
-//        }
-//        
-//        return correcto;
-//    }
     
     private void llenarComboBoxMesas(){
         ArrayList<Mesa> mesas = mesaData.getMesasActivas();
@@ -236,23 +221,15 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
      * Valida lo Ingresado en el JTextField Hora
      * @return true si está todo Bien, si no, false
      */
-    private boolean validarHora(){
+    private boolean validarCadenaNumerica(String cadena){
         boolean correcto;
         
         try{
-            int n = Integer.parseInt(jtfHora.getText());
-            
-            if(n < 19 || n > 23){//horarios de atencion
-                JOptionPane.showMessageDialog(this, "Horario Incorrecto!");
-                correcto = false;
-                //jtfHora.requestFocus();
-            }else{
-                correcto = true;
-            }
+            int n = Integer.parseInt(cadena);
+            correcto = true;
         }catch(NumberFormatException nfe){
             JOptionPane.showMessageDialog(this, "La Hora Debe ser un Número!");
             correcto = false;
-            //jtfHora.requestFocus();
         }
         
         return correcto;
@@ -264,6 +241,31 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
      */
     private boolean hayCamposVacios(){
         return jtfHora.getText().isEmpty() || jdcFecha.getDate() == null;
+    }
+    
+    /**
+     * comprueba si la hora seleccionada es correcta
+     * @param ldt fecha con la hora a comprobar
+     * @return true la Hora es correcta, si no, false
+     */
+    private boolean validarHorario(LocalDateTime ldt){
+        boolean correcto;
+        
+//        LocalTime lt = ldt.toLocalTime();
+        LocalDate ld = ldt.toLocalDate();
+        
+        LocalTime ahora = LocalTime.now();
+        LocalDate hoy = LocalDate.now();
+        
+//        LocalDateTime tiempo = LocalDateTime.now();
+        
+        if(ld.isAfter(hoy)){
+            correcto = (ldt.getHour() >= 20 && ldt.getHour() <= 23);
+        }else{
+            correcto = ldt.getHour() > ahora.getHour();
+        }
+        
+        return correcto;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
