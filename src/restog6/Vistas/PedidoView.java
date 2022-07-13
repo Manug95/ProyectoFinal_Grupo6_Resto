@@ -9,10 +9,12 @@ import data.Conexion;
 import data.DetallePedidoData;
 import data.MesaData;
 import data.MeseroData;
+import data.PedidoData;
 import data.ReservaData;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modelos.DetallePedido;
 import modelos.Mesa;
 import modelos.Mesero;
@@ -36,6 +38,8 @@ public class PedidoView extends javax.swing.JInternalFrame {
         detalleD = new DetallePedidoData(con);
         reservaD = new ReservaData(con);
         meseroD = new MeseroData(con);
+        pedidoD = new PedidoData(con);
+        mesaD = new MesaData(con);
         llenarReservaJCB(reservaD.getReservasActivas());
         llenarMeseroJCB((ArrayList)meseroD.todosLosMeseros());
     }
@@ -159,14 +163,20 @@ public class PedidoView extends javax.swing.JInternalFrame {
         Menu.jDesktopPane1.removeAll();
         Menu.jDesktopPane1.repaint();
         Pedido pedido = new Pedido();
-        pedido.setFecha(LocalDate.now().atTime(LocalTime.now()));
         pedido.setPagado(false);
         pedido.setMesero((Mesero)jcbMesero.getSelectedItem());
         pedido.setMesa(((Reserva)jcbReserva.getSelectedItem()).getMesa());
-        PedidoView2 pv = new PedidoView2(con, pedido);
-        pv.setVisible(true);
-        Menu.jDesktopPane1.add(pv);
-        Menu.jDesktopPane1.moveToFront(pv);
+        if (pedidoD.agregarPedido(pedido)){
+            Mesa m = mesaD.getMesaPorId(pedido.getMesa().getIdMesa());
+            m.setEstado('A');
+            mesaD.modificarMesa(m);
+            PedidoView2 pv = new PedidoView2(con, pedido);
+            pv.setVisible(true);
+            Menu.jDesktopPane1.add(pv);
+            Menu.jDesktopPane1.moveToFront(pv);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
+        }    
     }//GEN-LAST:event_jbNextActionPerformed
 
     //--------------  [BOTON CANCELAR]  ----------------
@@ -189,6 +199,7 @@ public class PedidoView extends javax.swing.JInternalFrame {
     //                                              ATRIBUTOS
     //---------------------------------------------------------------------------------------------------------------
     
+    private PedidoData pedidoD;
     private MeseroData meseroD;
     private DetallePedidoData detalleD;
     private ReservaData reservaD;

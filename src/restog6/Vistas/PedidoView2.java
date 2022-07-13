@@ -7,7 +7,9 @@ package restog6.Vistas;
 
 import data.Conexion;
 import data.DetallePedidoData;
+import data.MesaData;
 import data.PedidoData;
+import data.ProductoData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -35,13 +37,14 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         model = new DefaultTableModel();
         detalleD = new DetallePedidoData(con);
         pedidoD = new PedidoData(con);
+        productoD = new ProductoData(con);
+        mesaD = new MesaData(con);
         llenarCabeceraTable();
         this.pedido = pedido;
-        this.jbEliminar.setEnabled(false);
-        this.jbAgregar.setEnabled(false);
-        //llenarProductoJCB();
-        //llenarCantidadJCB();
-        //calcularTotal();
+        llenarProductoJCB();
+        llenarCantidadJCB();
+        calcularTotal();
+        
     }
 
     //                                          METODOS PRIVADOS
@@ -65,6 +68,8 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jtPedido = new javax.swing.JTable();
         jbAgregar = new javax.swing.JButton();
+        jbCancelar = new javax.swing.JButton();
+        jbModificar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -80,10 +85,18 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTable1);
 
         setBackground(new java.awt.Color(37, 37, 45));
+        setBorder(null);
+        setOpaque(true);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Producto");
+
+        jcbProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbProductoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -94,6 +107,9 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         jLabel3.setText("Total");
 
         jtfSubtotal.setEditable(false);
+        jtfSubtotal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jtfSubtotal.setBorder(null);
+        jtfSubtotal.setOpaque(false);
 
         jLabel4.setBackground(new java.awt.Color(153, 153, 153));
         jLabel4.setFont(new java.awt.Font("Sylfaen", 0, 36)); // NOI18N
@@ -106,7 +122,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         jbFinalizar.setBackground(new java.awt.Color(102, 102, 102));
         jbFinalizar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbFinalizar.setForeground(new java.awt.Color(255, 255, 255));
-        jbFinalizar.setText("Finalizar");
+        jbFinalizar.setText("Finalizar Pedido");
         jbFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbFinalizarActionPerformed(evt);
@@ -116,7 +132,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         jbEliminar.setBackground(new java.awt.Color(102, 102, 102));
         jbEliminar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        jbEliminar.setText("Cancelar Pedido");
+        jbEliminar.setText("Eliminar");
         jbEliminar.setBorder(null);
         jbEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -135,7 +151,18 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtPedido.setSelectionBackground(new java.awt.Color(102, 102, 102));
+        jtPedido.setShowHorizontalLines(false);
+        jtPedido.getTableHeader().setReorderingAllowed(false);
         jtPedido.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jtPedidoFocusGained(evt);
@@ -148,9 +175,31 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         jbAgregar.setForeground(new java.awt.Color(255, 255, 255));
         jbAgregar.setText("Agregar");
         jbAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbAgregar.setPreferredSize(new java.awt.Dimension(93, 37));
         jbAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbAgregarActionPerformed(evt);
+            }
+        });
+
+        jbCancelar.setBackground(new java.awt.Color(102, 102, 102));
+        jbCancelar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
+        jbCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        jbCancelar.setText("Cancelar Pedido");
+        jbCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbCancelarActionPerformed(evt);
+            }
+        });
+
+        jbModificar.setBackground(new java.awt.Color(102, 102, 102));
+        jbModificar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
+        jbModificar.setForeground(new java.awt.Color(255, 255, 255));
+        jbModificar.setText("Modificar");
+        jbModificar.setPreferredSize(new java.awt.Dimension(105, 37));
+        jbModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbModificarActionPerformed(evt);
             }
         });
 
@@ -167,25 +216,35 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jcbCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jcbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(28, 28, 28)
-                                .addComponent(jtfSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jbCancelar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jbAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jbFinalizar))
+                                .addGap(35, 35, 35))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(60, 60, 60)
-                                .addComponent(jbAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(70, 70, 70)
-                                .addComponent(jbFinalizar)
-                                .addGap(27, 27, 27)))))
-                .addContainerGap(60, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jtfSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jbModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(46, 46, 46)
+                                        .addComponent(jbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(226, 226, 226)))))))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +256,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtfSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(34, 34, 34)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -205,11 +264,16 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jbAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
 
@@ -221,54 +285,104 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         if (jtPedido.getSelectedRow() != -1){
             int id = (int) jtPedido.getValueAt(jtPedido.getSelectedRow(), 0);
             DetallePedido detallePedido = detalleD.obtenerDetallePedido(id);
-            if (detalleD.eliminarDetallePedido(detallePedido.getPedido(), detallePedido.getProducto())){
+            if (detalleD.eliminarDetallePedido(detallePedido.getIdDetalle())){
                 JOptionPane.showMessageDialog(this, "Se ha eliminado el pedido correctamente");
+                llenarTable();
+                calcularTotal();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se logro agregar el pedido...");
             }
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar uno de los pedidos de la lista");
         }
-        llenarTable();
-        //calcularTotal();
+        
     }//GEN-LAST:event_jbEliminarActionPerformed
 
     //-------------  [BOTON AGREGAR]  -----------------
     private void jbAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAgregarActionPerformed
         DetallePedido dp = new DetallePedido();
-        dp.setPedido(pedido);
+        dp.setPedido(this.pedido);
         dp.setActivo(true);
-//        dp.setProducto((Producto)jcbProducto.getSelectedItem());
-//        dp.setCantidad((int)jcbCantidad.getSelectedItem());
-//        if (detalleD.agregarDetallePedido(dp)){
-//            JOptionPane.showMessageDialog(this, "Se agrego el pedido con exito!");
-//        } else {
-//            JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
-//        }
-        llenarTable();
-        //calcularTotal();
+        dp.setProducto((Producto)jcbProducto.getSelectedItem());
+        dp.setCantidad((int)jcbCantidad.getSelectedItem());
+        if (detalleD.agregarDetallePedido(dp)){
+            JOptionPane.showMessageDialog(this, "Se agrego su orden con exito!");
+            llenarTable();
+            calcularTotal();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se logro agregar su orden");
+        }
+        
     }//GEN-LAST:event_jbAgregarActionPerformed
 
     //-------------  [BOTON FINALIZAR]  ---------------
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
-        if (pedidoD.agregarPedido(pedido)){
-            JOptionPane.showMessageDialog(this, "Se agrego su pedido con exito!");
+        if (!detalleD.obtenerDetallesPedidos(this.pedido.getIdPedido()).isEmpty()){
+            JOptionPane.showMessageDialog(this, "Su pedido ha sido guardado! /n Subtotal: $" + this.jtfSubtotal.getText());
         } else {
-            JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
+            if (pedidoD.eliminarPedido(pedido.getIdPedido())){
+                JOptionPane.showMessageDialog(this, "Se ha eliminado su pedido!");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un error, no se logro eliminar el pedido");
+            }
         }
         dispose();
     }//GEN-LAST:event_jbFinalizarActionPerformed
 
     private void jtPedidoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPedidoFocusGained
-        this.jbEliminar.setEnabled(true);
-        this.jbAgregar.setEnabled(true);
+
     }//GEN-LAST:event_jtPedidoFocusGained
 
+    //-------------  [BOTON CANCELAR]  ---------------
+    private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
+        int a = this.jtPedido.getRowCount()-1;
+        for (int i = a; i >= 0; i--) {
+            detalleD.eliminarDetallePedido((int) this.jtPedido.getValueAt(i, 0));
+        }
+        Mesa m = mesaD.getMesaPorId(pedido.getMesa().getIdMesa());
+        m.setEstado('O');
+        if (mesaD.modificarMesa(m)){
+            if (pedidoD.eliminarPedido(pedido.getIdPedido())){
+                JOptionPane.showMessageDialog(this, "Se ha eliminado su pedido!");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el pedido...");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al modificar el estado de la mesa...");
+        }
+    }//GEN-LAST:event_jbCancelarActionPerformed
+
+    //-------------  [COMBOBOX PRODUCTO]  ---------------
+    private void jcbProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProductoActionPerformed
+        this.llenarCantidadJCB();
+    }//GEN-LAST:event_jcbProductoActionPerformed
+
+    //-------------  [BOTON MODIFICAR]  ---------------
+    private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
+        if (this.jtPedido.getSelectedRow() != -1){
+            int id = (int) this.jtPedido.getValueAt(jtPedido.getSelectedRow(), 0);
+            if (detalleD.modificarProductoCantidad(id, (Producto)this.jcbProducto.getSelectedItem(), (int)this.jcbCantidad.getSelectedItem())){
+                JOptionPane.showMessageDialog(this, "Se modifico su pedido.");
+                llenarTable();
+                calcularTotal();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se logro modificar su pedido");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar el pedido que desea modificar.");
+        }
+    }//GEN-LAST:event_jbModificarActionPerformed
+
+    //-------------  [CALCULAR TOTAL]  ---------------
     private void calcularTotal(){
-        int a = this.jtPedido.getRowCount();
+        int a = this.jtPedido.getRowCount()-1;
         double subtotal = 0;
         for (int i = a; i >= 0; i--) {
             subtotal += (double)this.jtPedido.getValueAt(i, 3);
         }
-        this.jtfSubtotal.setText(subtotal+"");
+        this.jtfSubtotal.setText("$"+(subtotal));
     }
     
     //-----------------  [TABLA]  ---------------------
@@ -276,7 +390,10 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         borrarFilasTable();
         for (DetallePedido o : detalleD.obtenerDetallesPedidos(pedido.getIdPedido())) {
             model.addRow(new Object[]{
-                o.getIdDetalle(), o.getProducto(), o.getCantidad(), o.getSubtotal()
+                o.getIdDetalle(), 
+                o.getProducto().getNombreProducto(), 
+                o.getCantidad(), 
+                o.getSubtotal()
             });
         }        
     }
@@ -302,22 +419,24 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
     
     //------------------  [COMBOBOX]  -------------------
     private void llenarProductoJCB(){
-        for (Producto o : pedidoD.obtenerProductosNoPedidos(pedido)) {
+        for (Producto o : productoD.todosLosProductos()) {
             this.jcbProducto.addItem(o);
-            //Don't forget to check pedidoD 'cause you got some code commented
         }
     }
     private void llenarCantidadJCB(){
+        this.jcbCantidad.removeAllItems();
         Producto p = (Producto)jcbProducto.getSelectedItem();
         int c = p.getStock();
         for (int i = 0; i < c; i++) {
-            this.jcbCantidad.addItem(i);
+            this.jcbCantidad.addItem(i+1);
         }
     }
 
     //                                          ATRIBUTOS
     //---------------------------------------------------------------------------------------------------------------
     
+    private MesaData mesaD;
+    private ProductoData productoD;
     private PedidoData pedidoD;
     private Pedido pedido;
     private DetallePedidoData detalleD;
@@ -331,8 +450,10 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton jbAgregar;
+    private javax.swing.JButton jbCancelar;
     private javax.swing.JButton jbEliminar;
     private javax.swing.JButton jbFinalizar;
+    private javax.swing.JButton jbModificar;
     private javax.swing.JComboBox<Integer> jcbCantidad;
     private javax.swing.JComboBox<Producto> jcbProducto;
     private javax.swing.JTable jtPedido;

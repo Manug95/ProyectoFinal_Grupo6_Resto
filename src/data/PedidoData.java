@@ -11,8 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +49,56 @@ public class PedidoData {
     //---------------------------------------------------------------------------------------------------------------
     
     /**
+    * eliminar PEDIDO
+    * @param id ID del PEDIDO que se desea eliminar
+    * @return TRUE si se logro eliminar el PEDIDO o FALSE en caso contrario
+    */
+    public boolean eliminarPedido(int id){
+        boolean eliminado = false;
+        try {
+            String sql = "UPDATE pedido SET activo = false WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            if (ps.executeUpdate() != 0){
+                eliminado = true;
+            }
+            ps.close();
+        } catch (SQLException ex){ 
+            JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
+        }
+        return eliminado;
+    }
+    
+    /**
+    * obtener PEDIDOS
+    * @param estadoActivo Boolean del estado de los pedidos que se desea obtener
+    * @return List con pedidos si se encontraron pedidos en el estadoActivo o list vacia en caso contrario
+    */
+    public List<Pedido> obtenerPedidos(boolean estadoActivo){
+        ArrayList<Pedido> pedidos = new ArrayList();
+        try {
+            String sql = "SELECT * FROM pedido WHERE activo = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setBoolean(1, estadoActivo);
+            ResultSet rs = ps.executeQuery();
+            Pedido pedido;
+            while (rs.next()){
+                pedido = new Pedido();
+                pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
+                pedido.setIdPedido(rs.getInt("idPedido"));
+                pedido.setMesa(mesaD.getMesaPorId(rs.getInt("idMesa")));
+                pedido.setMesero(meseroD.obtenerMesero(rs.getInt("idMesero")));
+                pedido.setPagado(rs.getBoolean("pagado"));
+                pedido.setActivo(rs.getBoolean("activo"));
+                pedidos.add(pedido);
+            }
+        } catch (SQLException ex){ 
+            JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
+        }
+        return pedidos;
+    }
+    
+    /**
     * obtener PEDIDO
     * @param id ID del PEDIDO que se desea obtener
     * @return PEDIDO si se logro encontrar el PEDIDO o NULL en caso contrario
@@ -64,10 +114,10 @@ public class PedidoData {
                 pedido = new Pedido();
                 pedido.setIdPedido(rs.getInt("idPedido"));
                 pedido.setPagado(rs.getBoolean("pagado"));
-                LocalDateTime fecha = rs.getDate("horaFecha").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                pedido.setFecha(fecha);
+                pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
                 pedido.setMesa(mesaD.getMesaPorId(rs.getInt("idMesa")));
                 pedido.setMesero(meseroD.obtenerMesero(rs.getInt("idMesero")));
+                pedido.setActivo(rs.getBoolean("activo"));
             }
             ps.close();
         } catch (SQLException ex){ 
@@ -85,15 +135,16 @@ public class PedidoData {
         boolean modificado = false;
         try {
             String sql = "UPDATE pedido " +
-                         "SET idMesa, idMesero, horaFecha, pagado " +
-                         "VALUES (?,?,?,?)  WHERE idPedido = ?";
+                         "SET idMesa, idMesero, fecha, hora, pagado, activo " +
+                         "VALUES (?,?,?,?,?,?)  WHERE idPedido = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, pedido.getMesa().getIdMesa());
             ps.setInt(2, pedido.getMesero().getIdMesero());
-            
-            ps.setDate(3, Date.valueOf(pedido.getFecha().toLocalDate()));
+            ps.setTime(3, Time.valueOf(pedido.getFecha().toLocalTime()));
+            ps.setDate(4, Date.valueOf(pedido.getFecha().toLocalDate()));
             ps.setBoolean(4, pedido.isPagado());
             ps.setInt(5, pedido.getIdPedido());
+            ps.setBoolean(6, pedido.isActivo());
             if (ps.executeUpdate() != 0){
                 modificado = true;
             }
@@ -112,13 +163,12 @@ public class PedidoData {
     public boolean agregarPedido(Pedido pedido){
         boolean agregado = true;
         try {
-            String sql = "INSERT INTO pedido (idMesa, idMesero, horaFecha, pagado) " + 
-                    "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO pedido (idMesa, idMesero, pagado) " + 
+                    "VALUES (?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, pedido.getMesa().getIdMesa());
             ps.setInt(2, pedido.getMesero().getIdMesero());
-            ps.setDate(3, Date.valueOf(pedido.getFecha().toLocalDate()));
-            ps.setBoolean(4, pedido.isPagado());
+            ps.setBoolean(3, pedido.isPagado());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()){
@@ -156,55 +206,7 @@ public class PedidoData {
         return modificado;
     }
     
-    /**
-    * obtener List de Productos de un PEDIDO
-    * @param pedido pedido del cual se desean obtener los Productos
-    * @return List con productos del pedido o un List vacio
-    */
-    public List<Producto> obtenerProductosDePedido(Pedido pedido){
-        ArrayList<Producto> productos = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM producto " + 
-                    "WHERE idProducto IN (SELECT detallePedido.idProducto FROM detallePedido, pedido WHERE detallePedido.idPedido = pedido.idPedido AND pedido.idPedido = ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, pedido.getIdPedido());
-            ResultSet rs = ps.executeQuery();
-            Producto producto;
-            while (rs.next()){
-                //producto = productoD.getProductoPorID(rs.getInt("idProducto"));
-                //productos.add(producto);
-            }
-            ps.close();
-        } catch (SQLException ex){
-            JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
-        }
-        return productos;
-    }
     
-    /**
-    * obtener List de Productos que no se encuentran en un PEDIDO
-    * @param pedido pedido del cual se desean obtener los Productos no pedidos
-    * @return List con productos que no se han pedido o un List vacio
-    */
-    public List<Producto> obtenerProductosNoPedidos(Pedido pedido){
-        ArrayList<Producto> productos = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM producto " + 
-                    "WHERE activo = true AND idProducto NOT IN (SELECT detallePedido.idProducto FROM detallePedido, pedido WHERE detallePedido.idPedido = pedido.idPedido AND pedido.idPedido = ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, pedido.getIdPedido());
-            ResultSet rs = ps.executeQuery();
-            Producto producto;
-            while (rs.next()){
-                //producto = productoD.getProductoPorID(rs.getInt("idProducto"));
-                //productos.add(producto);
-            }
-            ps.close();
-        } catch (SQLException ex){
-            JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
-        }
-        return productos;
-    }
     
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------

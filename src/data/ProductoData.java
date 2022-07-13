@@ -139,6 +139,28 @@ public class ProductoData {
         return productos;
     }
     
+    public Producto obtenerProducto(int id){
+        Producto p = null;
+        try {
+            String sql = "SELECT * FROM producto WHERE idproducto = ?";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                p = new Producto();
+                p.setActivo(rs.getBoolean("activo"));
+                p.setNombreProducto(rs.getString("nombreProducto"));
+                p.setPrecio(rs.getDouble("precio"));
+                p.setStock(rs.getInt("stock"));
+                p.setIdProducto(rs.getInt("idProducto"));
+            }
+            ps.close();
+        } catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al obtener los productos");
+        }   
+        return p;
+    }
+    
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
 }

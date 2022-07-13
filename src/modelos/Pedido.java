@@ -1,7 +1,6 @@
 
 package modelos;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -16,23 +15,34 @@ public class Pedido {
     private boolean pagado;
     private Mesa mesa; 
     private Mesero mesero;
+    private boolean activo;
 
-    public Pedido() {
-    }
-
-    public Pedido(LocalDateTime fecha, boolean pagado, Mesa mesa, Mesero mesero) {
-        this.fecha = fecha;
-        this.pagado = pagado;
-        this.mesa = mesa;
-        this.mesero = mesero;
-    }
-
-    public Pedido(int idPedido, LocalDateTime fecha, boolean pagado, Mesa mesa, Mesero mesero) {
+    public Pedido(int idPedido, LocalDateTime fecha, boolean pagado, Mesa mesa, Mesero mesero, boolean activo) {
         this.idPedido = idPedido;
         this.fecha = fecha;
         this.pagado = pagado;
         this.mesa = mesa;
         this.mesero = mesero;
+        this.activo = activo;
+    }
+
+    public Pedido(LocalDateTime fecha, boolean pagado, Mesa mesa, Mesero mesero, boolean activo) {
+        this.fecha = fecha;
+        this.pagado = pagado;
+        this.mesa = mesa;
+        this.mesero = mesero;
+        this.activo = activo;
+    }
+
+    public Pedido() {
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public boolean isActivo() {
+        return activo;
     }
 
     public int getIdPedido() {
