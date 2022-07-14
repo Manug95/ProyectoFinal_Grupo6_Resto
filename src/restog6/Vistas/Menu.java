@@ -106,6 +106,11 @@ public class Menu extends javax.swing.JFrame {
         jmiProducto.setBackground(new java.awt.Color(255, 255, 255));
         jmiProducto.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jmiProducto.setText("Producto");
+        jmiProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiProductoActionPerformed(evt);
+            }
+        });
         jMenu1.add(jmiProducto);
 
         jMenuBar1.add(jMenu1);
@@ -201,6 +206,12 @@ public class Menu extends javax.swing.JFrame {
 
     private void jmiStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiStockActionPerformed
         // TODO add your handling code here:
+        ProductoViewStock pvs = new ProductoViewStock(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(pvs);
+        jDesktopPane1.moveToFront(pvs);
+        jDesktopPane1.repaint();
+        pvs.setVisible(true);
     }//GEN-LAST:event_jmiStockActionPerformed
 
     private void jmiConMeseroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiConMeseroActionPerformed
@@ -233,6 +244,16 @@ public class Menu extends javax.swing.JFrame {
         jDesktopPane1.repaint();
         rv.setVisible(true);
     }//GEN-LAST:event_jmiReservarActionPerformed
+
+    private void jmiProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiProductoActionPerformed
+        // TODO add your handling code here:
+        ProductoView pv = new ProductoView(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(pv);
+        jDesktopPane1.moveToFront(pv);
+        jDesktopPane1.repaint();
+        pv.setVisible(true);
+    }//GEN-LAST:event_jmiProductoActionPerformed
 
     /**
      * @param args the command line arguments
