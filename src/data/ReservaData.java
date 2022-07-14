@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import modelos.Reserva;
 
@@ -257,6 +258,26 @@ public class ReservaData {
         
         return hayReserva;
     }
+    
+    public List<Reserva> getReservasPorFecha(LocalDate fecha){
+        ArrayList<Reserva> reservas = new ArrayList();
+        try {
+            String sql = "SELECT * FROM reserva WHERE fechaReserva = ? AND activo = 1";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setDate(1, Date.valueOf(fecha));
+            Reserva r;
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                r = this.getReservaPorId(rs.getInt("idReserva"));
+                reservas.add(r);
+            }
+            ps.close();
+        } catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error!" + sqle);
+        }
+        return reservas;
+    }
+    
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
 }

@@ -36,7 +36,7 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
         meseroD = new MeseroData(con);
         pedidoD = new PedidoData(con);
         mesaD = new MesaData(con);
-        llenarReservaJCB(reservaD.getReservasActivas());
+        llenarReservaJCB((ArrayList<Reserva>) reservaD.getReservasPorFecha(LocalDate.now()));
         llenarMeseroJCB((ArrayList) meseroD.todosLosMeseros());
     }
 
