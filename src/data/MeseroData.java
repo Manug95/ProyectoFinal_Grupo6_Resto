@@ -1,14 +1,17 @@
 package data;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelos.Mesero;
+import modelos.Pedido;
 
 /**
  * @author Grupo 6
@@ -21,12 +24,14 @@ public class MeseroData {
     //---------------------------------------------------------------------------------------------------------------
     
     private Connection conexion = null;
+    private MesaData unaMesa;
     
     //                                  CONSTRUCTORES, GETTERS Y SETTERS
     //---------------------------------------------------------------------------------------------------------------
     
     public MeseroData(Conexion conexion){
         this.conexion = conexion.getConexion();
+        this.unaMesa = new MesaData(conexion);
     }
     
     //                                          METODOS PUBLICOS
@@ -164,6 +169,89 @@ public class MeseroData {
             JOptionPane.showMessageDialog(null, "Error al Obtener un mesero con ID = " + id + "!");
         }        
         return unMesero;
+    }
+    
+    public List<Pedido> pedidosCobradosXFecha(Date fecha){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        String f = formato.format(fecha);
+        String sql = "SELECT * "
+                   + "FROM pedido "
+                   + "WHERE horaFecha BETWEEN '" + f + " 00:00:00' AND '" + f + " 23:59:59' AND pagado = 1";        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            Pedido pedido;
+            while(rs.next()){
+                pedido = new Pedido();
+                pedido.setIdPedido(rs.getInt("idPedido"));
+                pedido.setPagado(rs.getBoolean("pagado"));
+                pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
+                pedido.setMesa(unaMesa.getMesaPorId(rs.getInt("idMesa")));
+                pedido.setMesero(obtenerMesero(rs.getInt("idMesero")));                
+                pedidos.add(pedido);
+            }            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al obtener los productos" + sqle);
+        }       
+       return pedidos;
+    }
+    
+    public List<Pedido> pedidosXFechaYMesero(Date fecha, int idMesero){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        String f = formato.format(fecha);
+        String sql = "SELECT * "
+                   + "FROM pedido "
+                   + "WHERE horaFecha BETWEEN '" + f + " 00:00:00' AND '" + f + " 23:59:59' AND pagado = 1 AND idMesero = ?";        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ps.setInt(1, idMesero);
+            Pedido pedido;
+            while(rs.next()){
+                pedido = new Pedido();
+                pedido.setIdPedido(rs.getInt("idPedido"));
+                pedido.setPagado(rs.getBoolean("pagado"));
+                pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
+                pedido.setMesa(unaMesa.getMesaPorId(rs.getInt("idMesa")));
+                pedido.setMesero(obtenerMesero(rs.getInt("idMesero")));                
+                pedidos.add(pedido);
+            }            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al obtener los productos" + sqle);
+        }       
+       return pedidos;
+    }
+    
+    public List<Pedido> pedidosXFechaYMesa(Date fecha, int idMesa){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        String f = formato.format(fecha);
+        String sql = "SELECT * "
+                   + "FROM pedido "
+                   + "WHERE horaFecha BETWEEN '" + f + " 00:00:00' AND '" + f + " 23:59:59' AND pagado = 1 AND idMesa = ?";        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ps.setInt(1, idMesa);
+            Pedido pedido;
+            while(rs.next()){
+                pedido = new Pedido();
+                pedido.setIdPedido(rs.getInt("idPedido"));
+                pedido.setPagado(rs.getBoolean("pagado"));
+                pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
+                pedido.setMesa(unaMesa.getMesaPorId(rs.getInt("idMesa")));
+                pedido.setMesero(obtenerMesero(rs.getInt("idMesero")));                
+                pedidos.add(pedido);
+            }            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al obtener los productos" + sqle);
+        }       
+       return pedidos;
     }
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
