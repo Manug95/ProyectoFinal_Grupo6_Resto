@@ -10,29 +10,21 @@ import data.DetallePedidoData;
 import data.MesaData;
 import data.PedidoData;
 import data.ProductoData;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.DetallePedido;
-import modelos.Mesa;
-import modelos.Mesero;
 import modelos.Pedido;
 import modelos.Producto;
-import modelos.Reserva;
 
 /**
- * @author Grupo 6
- * Fernandez Valentina
- * Romero Jorge
- * Manuel Gutierrez
+ * @author Grupo 6 Fernandez Valentina Romero Jorge Manuel Gutierrez
  */
-public class PedidoView2 extends javax.swing.JInternalFrame {
+public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
 
     //                                  CONSTRUCTORES, GETTERS Y SETTERS
     //---------------------------------------------------------------------------------------------------------------
-    
-    public PedidoView2(Conexion con, Pedido pedido) {
+    public PedidoView_AgregarDetalles(Conexion con, Pedido pedido) {
         initComponents();
         model = new DefaultTableModel();
         detalleD = new DetallePedidoData(con);
@@ -44,12 +36,11 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         llenarProductoJCB();
         llenarCantidadJCB();
         calcularTotal();
-        
+
     }
 
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,6 +99,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
 
         jtfSubtotal.setEditable(false);
         jtfSubtotal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jtfSubtotal.setForeground(new java.awt.Color(255, 255, 255));
         jtfSubtotal.setBorder(null);
         jtfSubtotal.setOpaque(false);
 
@@ -282,11 +274,17 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
 
     //-------------  [BOTON ELIMINAR]  ----------------
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
-        if (jtPedido.getSelectedRow() != -1){
+        if (jtPedido.getSelectedRow() != -1) {
             int id = (int) jtPedido.getValueAt(jtPedido.getSelectedRow(), 0);
             DetallePedido detallePedido = detalleD.obtenerDetallePedido(id);
-            if (detalleD.eliminarDetallePedido(detallePedido.getIdDetalle())){
-                JOptionPane.showMessageDialog(this, "Se ha eliminado el pedido correctamente");
+            if (detalleD.eliminarDetallePedido(detallePedido.getIdDetalle())) {
+                Producto p = detallePedido.getProducto();
+                p.setStock(p.getStock()+ detallePedido.getCantidad());
+                if (productoD.modificarProducto(p)){
+                    JOptionPane.showMessageDialog(this, "Se ha eliminado el pedido correctamente");
+                }
+                this.llenarProductoJCB();
+                this.llenarCantidadJCB();
                 llenarTable();
                 calcularTotal();
             } else {
@@ -295,7 +293,7 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar uno de los pedidos de la lista");
         }
-        
+
     }//GEN-LAST:event_jbEliminarActionPerformed
 
     //-------------  [BOTON AGREGAR]  -----------------
@@ -303,25 +301,27 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         DetallePedido dp = new DetallePedido();
         dp.setPedido(this.pedido);
         dp.setActivo(true);
-        dp.setProducto((Producto)jcbProducto.getSelectedItem());
-        dp.setCantidad((int)jcbCantidad.getSelectedItem());
-        if (detalleD.agregarDetallePedido(dp)){
+        dp.setProducto((Producto) jcbProducto.getSelectedItem());
+        dp.setCantidad((int) jcbCantidad.getSelectedItem());
+        if (detalleD.agregarDetallePedido(dp)) {
             JOptionPane.showMessageDialog(this, "Se agrego su orden con exito!");
             llenarTable();
+            llenarProductoJCB();
+            llenarCantidadJCB();
             calcularTotal();
         } else {
             JOptionPane.showMessageDialog(this, "No se logro agregar su orden");
         }
-        
+
     }//GEN-LAST:event_jbAgregarActionPerformed
 
     //-------------  [BOTON FINALIZAR]  ---------------
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
-        if (!detalleD.obtenerDetallesPedidos(this.pedido.getIdPedido()).isEmpty()){
+        if (!detalleD.obtenerDetallesPedidos(this.pedido.getIdPedido()).isEmpty()) {
             JOptionPane.showMessageDialog(this, "Su pedido ha sido guardado! /n Subtotal: $" + this.jtfSubtotal.getText());
         } else {
-            if (pedidoD.eliminarPedido(pedido.getIdPedido())){
-                JOptionPane.showMessageDialog(this, "Se ha eliminado su pedido!");
+            if (pedidoD.eliminarPedido(pedido.getIdPedido())) {
+                JOptionPane.showMessageDialog(this, "Su pedido se ha eliminado ya que no contenia ninguna orden!");
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Hubo un error, no se logro eliminar el pedido");
@@ -336,35 +336,59 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
 
     //-------------  [BOTON CANCELAR]  ---------------
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
-        int a = this.jtPedido.getRowCount()-1;
+        int a = this.jtPedido.getRowCount() - 1;
         for (int i = a; i >= 0; i--) {
             detalleD.eliminarDetallePedido((int) this.jtPedido.getValueAt(i, 0));
         }
-        Mesa m = mesaD.getMesaPorId(pedido.getMesa().getIdMesa());
-        m.setEstado('O');
-        if (mesaD.modificarMesa(m)){
-            if (pedidoD.eliminarPedido(pedido.getIdPedido())){
-                JOptionPane.showMessageDialog(this, "Se ha eliminado su pedido!");
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el pedido...");
-            }
+        mesaD.modificarEstadoDeMesa(pedido.getMesa().getIdMesa(), 'O');
+        if (pedidoD.eliminarPedido(pedido.getIdPedido())) {
+            JOptionPane.showMessageDialog(this, "Se ha eliminado su pedido!");
+            dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Hubo un error al modificar el estado de la mesa...");
+            JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el pedido...");
         }
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     //-------------  [COMBOBOX PRODUCTO]  ---------------
     private void jcbProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProductoActionPerformed
-        this.llenarCantidadJCB();
+        if (this.jcbProducto.getSelectedIndex() != -1){
+            this.llenarCantidadJCB();
+        }
     }//GEN-LAST:event_jcbProductoActionPerformed
 
     //-------------  [BOTON MODIFICAR]  ---------------
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-        if (this.jtPedido.getSelectedRow() != -1){
-            int id = (int) this.jtPedido.getValueAt(jtPedido.getSelectedRow(), 0);
-            if (detalleD.modificarProductoCantidad(id, (Producto)this.jcbProducto.getSelectedItem(), (int)this.jcbCantidad.getSelectedItem())){
+        if (this.jtPedido.getSelectedRow() != -1) {
+            //tomar el producto original y su cantidad, si el productoOriginal es igual al producto Nuevo: a) si la cantNueva es mayor, debo restar del stock; o b) debo aumentar el stock en caso contrario
+            //si el producto es distinto, debo aumentarle la cantidad original al stock del producto original
+            //Y disminuir el stock del producto nuevo;
+            
+            DetallePedido p = detalleD.obtenerDetallePedido((int) this.jtPedido.getValueAt(jtPedido.getSelectedRow(), 0));
+            
+            Producto pO = productoD.obtenerProducto(p.getProducto().getIdProducto());
+            int cantO = (int) this.jtPedido.getValueAt(jtPedido.getSelectedRow(), 2);
+            Producto pN = (Producto) this.jcbProducto.getSelectedItem();
+            int cantN = (int) this.jcbCantidad.getSelectedItem();            
+            
+            if (detalleD.modificarProductoCantidad(p.getIdDetalle(), pN, cantN)) {
                 JOptionPane.showMessageDialog(this, "Se modifico su pedido.");
+                
+                if (pO.getIdProducto() == pN.getIdProducto()){
+                    if (cantN >= cantO){
+                        pO.setStock(pO.getStock() - (cantN-cantO));
+                    } else {
+                        pO.setStock(pO.getStock() + (cantO - cantN));
+                    }
+                } else {
+                    pO.setStock(pO.getStock() + cantO);
+                    pN.setStock(pN.getStock() - cantN);
+                }
+                
+                productoD.modificarProducto(pO);
+                productoD.modificarProducto(pN);
+                
+                this.llenarProductoJCB();
+                this.llenarCantidadJCB();
                 llenarTable();
                 calcularTotal();
             } else {
@@ -376,36 +400,37 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbModificarActionPerformed
 
     //-------------  [CALCULAR TOTAL]  ---------------
-    private void calcularTotal(){
-        int a = this.jtPedido.getRowCount()-1;
+    private void calcularTotal() {
+        this.jtfSubtotal.setText("");
+        int a = this.jtPedido.getRowCount() - 1;
         double subtotal = 0;
         for (int i = a; i >= 0; i--) {
-            subtotal += (double)this.jtPedido.getValueAt(i, 3);
+            subtotal += (double) this.jtPedido.getValueAt(i, 3);
         }
-        this.jtfSubtotal.setText("$"+(subtotal));
+        this.jtfSubtotal.setText("$" + (subtotal));
     }
-    
+
     //-----------------  [TABLA]  ---------------------
-    private void llenarTable(){
+    private void llenarTable() {
         borrarFilasTable();
         for (DetallePedido o : detalleD.obtenerDetallesPedidos(pedido.getIdPedido())) {
             model.addRow(new Object[]{
-                o.getIdDetalle(), 
-                o.getProducto().getNombreProducto(), 
-                o.getCantidad(), 
+                o.getIdDetalle(),
+                o.getProducto().getNombreProducto(),
+                o.getCantidad(),
                 o.getSubtotal()
             });
-        }        
+        }
     }
-    
-    private void borrarFilasTable(){
-        int a = model.getRowCount()-1;
+
+    private void borrarFilasTable() {
+        int a = model.getRowCount() - 1;
         for (int i = a; i >= 0; i--) {
             model.removeRow(i);
         }
     }
-    
-    private void llenarCabeceraTable(){
+
+    private void llenarCabeceraTable() {
         ArrayList<Object> c = new ArrayList<>();
         c.add("Codigo");
         c.add("PRODUCTO");
@@ -416,25 +441,27 @@ public class PedidoView2 extends javax.swing.JInternalFrame {
         }
         this.jtPedido.setModel(model);
     }
-    
+
     //------------------  [COMBOBOX]  -------------------
-    private void llenarProductoJCB(){
-        for (Producto o : productoD.todosLosProductos()) {
+    private void llenarProductoJCB() {
+        this.jcbProducto.removeAllItems();
+        
+        for (Producto o : productoD.todosLosProductosStock()) {
             this.jcbProducto.addItem(o);
         }
     }
-    private void llenarCantidadJCB(){
+
+    private void llenarCantidadJCB() {
         this.jcbCantidad.removeAllItems();
-        Producto p = (Producto)jcbProducto.getSelectedItem();
+        Producto p = (Producto) jcbProducto.getSelectedItem();
         int c = p.getStock();
         for (int i = 0; i < c; i++) {
-            this.jcbCantidad.addItem(i+1);
+            this.jcbCantidad.addItem(i + 1);
         }
     }
 
     //                                          ATRIBUTOS
     //---------------------------------------------------------------------------------------------------------------
-    
     private MesaData mesaD;
     private ProductoData productoD;
     private PedidoData pedidoD;

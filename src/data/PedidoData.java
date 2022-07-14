@@ -49,7 +49,28 @@ public class PedidoData {
     //---------------------------------------------------------------------------------------------------------------
     
     /**
-    * eliminar PEDIDO
+    * eliminar PEDIDO -eliminado fisico-
+    * @param id ID del PEDIDO que se desea eliminar
+    * @return TRUE si se logro eliminar el PEDIDO o FALSE en caso contrario
+    */
+    public boolean eliminarPedidoFisico(int id){
+        boolean eliminado = false;
+        try {
+            String sql = "DELETE FROM pedido WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            if (ps.executeUpdate() != 0){
+                eliminado = true;
+            }
+            ps.close();
+        } catch (SQLException ex){ 
+            JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
+        }
+        return eliminado;
+    }    
+    
+    /**
+    * eliminar PEDIDO -eliminado logico-
     * @param id ID del PEDIDO que se desea eliminar
     * @return TRUE si se logro eliminar el PEDIDO o FALSE en caso contrario
     */
@@ -200,13 +221,35 @@ public class PedidoData {
             if (ps.executeUpdate() != 0){
                 modificado = true;
             }
+            ps.close();
         } catch (SQLException ex){
             JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
         }
         return modificado;
     }
     
-    
+    /**
+    * modificar boolean activo de un PEDIDO
+    * @param id ID del PEDIDO que se desea modificar el boolean pagado a true
+    * @param activo Estado al que se desea setear el pedido
+    * @return TRUE si se logro modificar el PEDIDO o FALSE en caso contrario
+    */
+    public boolean modificarActivoPedido(int id, boolean activo){
+        boolean modificado = false;
+        try {
+            String sql = "UPDATE pedido SET activo = ? WHERE idPedido = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setBoolean(1, activo);
+            ps.setInt(2, id);
+            if (ps.executeUpdate() != 0){
+                modificado = true;
+            }
+            ps.close();
+        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error: " + ex + ", statement: " + ex.getSQLState());
+        }
+        return modificado;
+    }
     
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------

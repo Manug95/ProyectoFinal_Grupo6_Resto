@@ -228,7 +228,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiSalirActionPerformed
 
     private void jmiOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiOrdenarActionPerformed
-        PedidoView pv = new PedidoView(conexion);
+        PedidoView_AgregarPedido pv = new PedidoView_AgregarPedido(conexion);
         jDesktopPane1.removeAll();
         jDesktopPane1.add(pv);
         jDesktopPane1.moveToFront(pv);

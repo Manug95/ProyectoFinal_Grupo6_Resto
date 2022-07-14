@@ -22,17 +22,13 @@ import modelos.Pedido;
 import modelos.Reserva;
 
 /**
- * @author Grupo 6
- * Fernandez Valentina
- * Romero Jorge
- * Manuel Gutierrez
+ * @author Grupo 6 Fernandez Valentina Romero Jorge Manuel Gutierrez
  */
-public class PedidoView extends javax.swing.JInternalFrame {
-    
+public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
+
     //                                  CONSTRUCTORES, GETTERS Y SETTERS
     //---------------------------------------------------------------------------------------------------------------
-    
-    public PedidoView(Conexion con) {
+    public PedidoView_AgregarPedido(Conexion con) {
         initComponents();
         this.con = con;
         detalleD = new DetallePedidoData(con);
@@ -41,12 +37,11 @@ public class PedidoView extends javax.swing.JInternalFrame {
         pedidoD = new PedidoData(con);
         mesaD = new MesaData(con);
         llenarReservaJCB(reservaD.getReservasActivas());
-        llenarMeseroJCB((ArrayList)meseroD.todosLosMeseros());
+        llenarMeseroJCB((ArrayList) meseroD.todosLosMeseros());
     }
 
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -164,19 +159,17 @@ public class PedidoView extends javax.swing.JInternalFrame {
         Menu.jDesktopPane1.repaint();
         Pedido pedido = new Pedido();
         pedido.setPagado(false);
-        pedido.setMesero((Mesero)jcbMesero.getSelectedItem());
-        pedido.setMesa(((Reserva)jcbReserva.getSelectedItem()).getMesa());
-        if (pedidoD.agregarPedido(pedido)){
-            Mesa m = mesaD.getMesaPorId(pedido.getMesa().getIdMesa());
-            m.setEstado('A');
-            mesaD.modificarMesa(m);
-            PedidoView2 pv = new PedidoView2(con, pedido);
+        pedido.setMesero((Mesero) jcbMesero.getSelectedItem());
+        pedido.setMesa(((Reserva) jcbReserva.getSelectedItem()).getMesa());
+        if (pedidoD.agregarPedido(pedido)) {
+            mesaD.modificarEstadoDeMesa(pedido.getMesa().getIdMesa(), 'A');
+            PedidoView_AgregarDetalles pv = new PedidoView_AgregarDetalles(con, pedido);
             pv.setVisible(true);
             Menu.jDesktopPane1.add(pv);
             Menu.jDesktopPane1.moveToFront(pv);
         } else {
             JOptionPane.showMessageDialog(this, "No se logro agregar el pedido");
-        }    
+        }
     }//GEN-LAST:event_jbNextActionPerformed
 
     //--------------  [BOTON CANCELAR]  ----------------
@@ -185,12 +178,13 @@ public class PedidoView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jcbCancelActionPerformed
 
     //--------------  [LLENAR COMBOBOX]  ---------------
-    private void llenarReservaJCB(ArrayList<Reserva> lista){
+    private void llenarReservaJCB(ArrayList<Reserva> lista) {
         for (Reserva r : lista) {
             this.jcbReserva.addItem(r);
         }
     }
-    private void llenarMeseroJCB(ArrayList<Mesero> lista){
+
+    private void llenarMeseroJCB(ArrayList<Mesero> lista) {
         for (Mesero m : lista) {
             this.jcbMesero.addItem(m);
         }
@@ -198,7 +192,6 @@ public class PedidoView extends javax.swing.JInternalFrame {
 
     //                                              ATRIBUTOS
     //---------------------------------------------------------------------------------------------------------------
-    
     private PedidoData pedidoD;
     private MeseroData meseroD;
     private DetallePedidoData detalleD;

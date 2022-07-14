@@ -161,6 +161,29 @@ public class ProductoData {
         return p;
     }
     
+        public List<Producto> todosLosProductosStock(){
+        ArrayList<Producto> productos = new ArrayList<>();        
+        String sql = "SELECT * FROM producto WHERE activo = 1 AND stock > 0";        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);            
+            ResultSet result = ps.executeQuery();            
+            Producto unProducto;
+            while(result.next()){
+                unProducto = new Producto();
+                unProducto.setIdProducto(result.getInt("idProducto"));
+                unProducto.setNombreProducto(result.getString("nombreProducto"));
+                unProducto.setPrecio(result.getDouble("precio"));
+                unProducto.setStock(result.getInt("stock"));
+                unProducto.setActivo(result.getBoolean("activo"));                
+                productos.add(unProducto);
+            }            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al obtener los productos");
+        }        
+        return productos;
+    }
+    
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
 }
