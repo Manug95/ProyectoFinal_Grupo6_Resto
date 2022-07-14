@@ -73,7 +73,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Agregar la Reserva!" + sqle);
+            JOptionPane.showMessageDialog(null, "Error al Agregar la Reserva! " + sqle);
         }
         
         return agregada;
@@ -113,7 +113,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Obtener la Reserva!");
+            JOptionPane.showMessageDialog(null, "Error al Obtener la Reserva! " + sqle);
         }
         
         return reserva;
@@ -150,7 +150,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Modificar la Reserva!" + sqle);
+            JOptionPane.showMessageDialog(null, "Error al Modificar la Reserva! " + sqle);
         }
         
         return modificada;
@@ -179,7 +179,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Borrar la Reserva!");
+            JOptionPane.showMessageDialog(null, "Error al Borrar la Reserva! " + sqle);
         }
         
         return borrada;
@@ -219,19 +219,19 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al Obtener las Reservas!" + sqle);
+            JOptionPane.showMessageDialog(null, "Error al Obtener las Reservas! " + sqle);
         }
         
         return reservas;
     }
     
     /**
-     * Trae la Reserva de una mesa en Tal Día
+     * Comprueba si hay una Reserva de una mesa en Tal Día
      * @param idMesa id de la mesa
      * @param fecha de la reserva
      * @return true si hay una reserva en esa mesa en ese día, false si no hay ninguna reserva
      */
-    public boolean getReservaDeMesaXFecha(int idMesa, LocalDateTime fecha){
+    public boolean verificarReservaDeMesaXFecha(int idMesa, LocalDateTime fecha){
         boolean hayReserva = false;
         
         String sql = "SELECT * "
@@ -253,7 +253,7 @@ public class ReservaData {
             
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error!" + sqle);
+            JOptionPane.showMessageDialog(null, "Error! " + sqle);
         }
         
         return hayReserva;
@@ -278,6 +278,140 @@ public class ReservaData {
         return reservas;
     }
     
+    /**
+     * Trae las Reservas asociadas a un nombre de cliente
+     * @param nombre del cliente del que se desea obtener las reservas
+     * @return un ArrayList con las reservas del cliente
+     */
+    public ArrayList<Reserva> getReservasPorNombreCliente(String nombre){
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        
+        String sql = "SELECT * "
+                   + "FROM reserva "
+                   + "WHERE nombreCliente = ? AND activo = 1;";
+        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            
+            ps.setString(1, nombre);
+            
+            ResultSet result = ps.executeQuery();
+            
+            Reserva reserva;
+            while(result.next()){
+                reserva = new Reserva();
+                
+                reserva.setIdReserva(result.getInt("idReserva"));
+                reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
+                
+                LocalDate ld = result.getDate("fechaReserva").toLocalDate();
+                LocalTime lt = result.getTime("horaReserva").toLocalTime();
+                reserva.setFechaReserva(LocalDateTime.of(ld, lt));
+                
+                reserva.setDniCliente(result.getString("dniCliente"));
+                reserva.setNombreCliente(result.getString("nombreCliente"));
+                reserva.setActivo(result.getBoolean("activo"));
+                
+                reservas.add(reserva);
+            }
+            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al Obtener las Reservas por Nombre del Cliente! " + sqle);
+        }
+        
+        return reservas;
+    }
+    
+//    /**
+//     * Trae las Reservas asociadas a una fecha
+//     * @param fecha de la que de quiere obtener las reservas
+//     * @return un ArrayList con las reservas en esa Fecha
+//     */
+//    public ArrayList<Reserva> getReservasPorFecha(LocalDate fecha){
+//        ArrayList<Reserva> reservas = new ArrayList<>();
+//        
+//        String sql = "SELECT * "
+//                   + "FROM reserva "
+//                   + "WHERE fechaReserva = ? AND activo = 1;";
+//        
+//        try{
+//            PreparedStatement ps = conexion.prepareStatement(sql);
+//            
+//            ps.setDate(1, Date.valueOf(fecha));
+//            
+//            ResultSet result = ps.executeQuery();
+//            
+//            Reserva reserva;
+//            while(result.next()){
+//                reserva = new Reserva();
+//                
+//                reserva.setIdReserva(result.getInt("idReserva"));
+//                reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
+//                
+//                LocalDate ld = result.getDate("fechaReserva").toLocalDate();
+//                LocalTime lt = result.getTime("horaReserva").toLocalTime();
+//                reserva.setFechaReserva(LocalDateTime.of(ld, lt));
+//                
+//                reserva.setDniCliente(result.getString("dniCliente"));
+//                reserva.setNombreCliente(result.getString("nombreCliente"));
+//                reserva.setActivo(result.getBoolean("activo"));
+//                
+//                reservas.add(reserva);
+//            }
+//            
+//            ps.close();
+//        }catch(SQLException sqle){
+//            JOptionPane.showMessageDialog(null, "Error al Obtener las Reservas por Fecha! " + sqle);
+//        }
+//        
+//        return reservas;
+//    }
+    
+    /**
+     * Trae las Reservas asociadas a una Mesa
+     * @param idMesa de la Mesa de la que de quiere obtener las reservas
+     * @return un ArrayList con las reservas en esa Mesa
+     */
+    public ArrayList<Reserva> getReservasPorMesa(int idMesa){
+        ArrayList<Reserva> reservas = new ArrayList<>();
+        
+        String sql = "SELECT * "
+                   + "FROM reserva "
+                   + "WHERE idMesa = ? AND activo = 1;";
+        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            
+            ps.setInt(1, idMesa);
+            
+            ResultSet result = ps.executeQuery();
+            
+            Reserva reserva;
+            while(result.next()){
+                reserva = new Reserva();
+                
+                reserva.setIdReserva(result.getInt("idReserva"));
+                reserva.setMesa(mesaData.getMesaPorId(result.getInt("idMesa")));
+                
+                LocalDate ld = result.getDate("fechaReserva").toLocalDate();
+                LocalTime lt = result.getTime("horaReserva").toLocalTime();
+                reserva.setFechaReserva(LocalDateTime.of(ld, lt));
+                
+                reserva.setDniCliente(result.getString("dniCliente"));
+                reserva.setNombreCliente(result.getString("nombreCliente"));
+                reserva.setActivo(result.getBoolean("activo"));
+                
+                reservas.add(reserva);
+            }
+            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al Obtener las Reservas por Mesa! " + sqle);
+        }
+        
+        return reservas;
+    }
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
 }

@@ -196,7 +196,7 @@ public class ReservaView_Reservar extends javax.swing.JInternalFrame {
                         
                         if(validarHorario(fechaReserva)){
                             //hace la reserva si no hay ninguna hecha para esa mesa y ese dia
-                            if(!reservaData.getReservaDeMesaXFecha(mesaSeleccionada.getIdMesa(), fechaReserva)){
+                            if(!reservaData.verificarReservaDeMesaXFecha(mesaSeleccionada.getIdMesa(), fechaReserva)){
                                 Reserva reserva = new Reserva(mesaSeleccionada, fechaReserva, jtfDniCliente.getText(), jtfNombreCliente.getText(), true);
 
                                 if(reservaData.agregarReserva(reserva)){

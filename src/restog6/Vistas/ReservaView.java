@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelos.Reserva;
@@ -28,8 +29,12 @@ public class ReservaView extends javax.swing.JInternalFrame {
     
     private ReservaView_Reservar ventanaReservar = null;
     private ReservaView_Modificar ventanaModificar = null;
+    private ReservaView_SeleccionarFecha ventanaFecha = null;
     
     private Comparator<Reserva> compaID;
+    private Comparator<Reserva> compaNombre;
+    private Comparator<Reserva> compaFecha;
+    private Comparator<Reserva> compaMesa;
     
     /** Creates new form ReservaView */
     public ReservaView(Conexion conexion) {
@@ -40,6 +45,9 @@ public class ReservaView extends javax.swing.JInternalFrame {
         this.mesaData = new MesaData(conexion);
         this.reservaData = new ReservaData(conexion);
         this.modeloTabla = new DefaultTableModel();
+        
+        this.jdcFiltroFecha.setMinSelectableDate(new Date());
+        this.jdcFiltroFecha.getDateEditor().setEnabled(false);
         
         armarTabla();
         
@@ -59,6 +67,41 @@ public class ReservaView extends javax.swing.JInternalFrame {
         };
         
         cargarReservasEnTabla(compaID);
+        
+        compaNombre = new Comparator<Reserva>(){
+            @Override
+            public int compare(Reserva r, Reserva r1){
+                return r.getNombreCliente().compareTo(r1.getNombreCliente());
+            }
+        };
+        compaFecha = new Comparator<Reserva>(){
+            @Override
+            public int compare(Reserva r, Reserva r1){
+                if(r.getFechaReserva().isBefore(r1.getFechaReserva())){
+                    return -1;
+                }else{
+                    if(r.getFechaReserva().isAfter(r1.getFechaReserva())){
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                }
+            }
+        };
+        compaMesa = new Comparator<Reserva>(){
+            @Override
+            public int compare(Reserva r, Reserva r1){
+                if(r.getMesa().getIdMesa() < r1.getMesa().getIdMesa()){
+                    return -1;
+                }else{
+                    if(r.getMesa().getIdMesa() > r1.getMesa().getIdMesa()){
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                }
+            }
+        };
     }
 
     /** This method is called from within the constructor to
@@ -75,13 +118,18 @@ public class ReservaView extends javax.swing.JInternalFrame {
         jbCancelar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtReservasActivas = new javax.swing.JTable();
-        jlReservasActivas = new javax.swing.JLabel();
+        jlFiltrarPor = new javax.swing.JLabel();
         jbCancelarReserva = new javax.swing.JButton();
         jbRefrescarTabla = new javax.swing.JButton();
         jbModificarReserva = new javax.swing.JButton();
         jbNombreCliente = new javax.swing.JButton();
         jbFechaReserva = new javax.swing.JButton();
         jlOrdenarPor = new javax.swing.JLabel();
+        jbMesas = new javax.swing.JButton();
+        jbFiltroNombre = new javax.swing.JButton();
+        jbFiltroFecha = new javax.swing.JButton();
+        jbFiltroMesa = new javax.swing.JButton();
+        jdcFiltroFecha = new com.toedter.calendar.JDateChooser();
 
         setResizable(true);
 
@@ -123,7 +171,7 @@ public class ReservaView extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtReservasActivas);
 
-        jlReservasActivas.setText("Reservas Activas");
+        jlFiltrarPor.setText("Filtrar Por");
 
         jbCancelarReserva.setText("Cancelar Reserva");
         jbCancelarReserva.addActionListener(new java.awt.event.ActionListener() {
@@ -162,41 +210,82 @@ public class ReservaView extends javax.swing.JInternalFrame {
 
         jlOrdenarPor.setText("Ordenar Por");
 
+        jbMesas.setText("Mesa");
+        jbMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbMesasActionPerformed(evt);
+            }
+        });
+
+        jbFiltroNombre.setText("Nombre");
+        jbFiltroNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltroNombreActionPerformed(evt);
+            }
+        });
+
+        jbFiltroFecha.setText("Fecha");
+        jbFiltroFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltroFechaActionPerformed(evt);
+            }
+        });
+
+        jbFiltroMesa.setText("Mesa");
+        jbFiltroMesa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbFiltroMesaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(35, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jbNuevaReserva)
+                        .addGap(50, 50, 50)
+                        .addComponent(jbCancelarReserva)
+                        .addGap(65, 65, 65)
+                        .addComponent(jbModificarReserva)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbCancelar)
+                        .addGap(52, 52, 52))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlReservasActivas)
-                        .addGap(69, 69, 69)
-                        .addComponent(jbRefrescarTabla)
-                        .addGap(65, 65, 65))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
                                 .addComponent(jlOrdenarPor)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jbNombreCliente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbFechaReserva))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jbNuevaReserva)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jbCancelarReserva)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jbModificarReserva)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(jbCancelar))))
-                        .addGap(29, 29, 29))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlReservaMesas)
-                        .addGap(180, 180, 180))))
+                                .addGap(18, 18, 18)
+                                .addComponent(jbFechaReserva)
+                                .addGap(18, 18, 18)
+                                .addComponent(jbMesas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jbRefrescarTabla))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlFiltrarPor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbFiltroNombre)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbFiltroMesa)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jlReservaMesas)
+                                        .addGap(223, 223, 223))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jdcFiltroFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jbFiltroFecha)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addGap(40, 40, 40))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,23 +293,29 @@ public class ReservaView extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jlReservaMesas)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbRefrescarTabla)
-                    .addComponent(jlReservasActivas))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jlFiltrarPor)
+                        .addComponent(jbFiltroNombre)
+                        .addComponent(jbFiltroMesa))
+                    .addComponent(jbFiltroFecha)
+                    .addComponent(jdcFiltroFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbFechaReserva)
+                    .addComponent(jlOrdenarPor)
                     .addComponent(jbNombreCliente)
-                    .addComponent(jlOrdenarPor))
-                .addGap(31, 31, 31)
+                    .addComponent(jbFechaReserva)
+                    .addComponent(jbMesas)
+                    .addComponent(jbRefrescarTabla))
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbCancelar)
-                    .addComponent(jbModificarReserva)
+                    .addComponent(jbNuevaReserva)
                     .addComponent(jbCancelarReserva)
-                    .addComponent(jbNuevaReserva))
-                .addContainerGap(29, Short.MAX_VALUE))
+                    .addComponent(jbModificarReserva)
+                    .addComponent(jbCancelar))
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -283,6 +378,7 @@ public class ReservaView extends javax.swing.JInternalFrame {
     private void refrescarTabla(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refrescarTabla
         borrarFilasTabla();
         cargarReservasEnTabla(compaID);
+        jdcFiltroFecha.setDate(null);
     }//GEN-LAST:event_refrescarTabla
 
     /**
@@ -330,33 +426,83 @@ public class ReservaView extends javax.swing.JInternalFrame {
 
     private void jbNombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNombreClienteActionPerformed
         borrarFilasTabla();
-        
-        cargarReservasEnTabla(new Comparator<Reserva>(){
-            @Override
-            public int compare(Reserva r, Reserva r1){
-                return r.getNombreCliente().compareTo(r1.getNombreCliente());
-            }
-        });
+        cargarReservasEnTabla(compaNombre);
+        jdcFiltroFecha.setDate(null);
     }//GEN-LAST:event_jbNombreClienteActionPerformed
 
     private void jbFechaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFechaReservaActionPerformed
         borrarFilasTabla();
+        cargarReservasEnTabla(compaFecha);
+        jdcFiltroFecha.setDate(null);
+    }//GEN-LAST:event_jbFechaReservaActionPerformed
+
+    private void jbMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMesasActionPerformed
+        borrarFilasTabla();
+        cargarReservasEnTabla(compaMesa);
+        jdcFiltroFecha.setDate(null);
+    }//GEN-LAST:event_jbMesasActionPerformed
+
+    private void jbFiltroNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltroNombreActionPerformed
+        jdcFiltroFecha.setDate(null);
         
-        cargarReservasEnTabla(new Comparator<Reserva>(){
-            @Override
-            public int compare(Reserva r, Reserva r1){
-                if(r.getFechaReserva().isBefore(r1.getFechaReserva())){
-                    return -1;
+        String respuesta = JOptionPane.showInternalInputDialog(this, "Nombre: ");
+        
+        if(respuesta != null){
+            listaReservas = reservaData.getReservasPorNombreCliente(respuesta);
+        
+            if(!listaReservas.isEmpty()){
+                borrarFilasTabla();
+                cargarReservasFiltradas(compaNombre);
+            }else{
+                JOptionPane.showMessageDialog(this, "No Hay Reservas con el Nombre " + respuesta);
+            }
+        }
+    }//GEN-LAST:event_jbFiltroNombreActionPerformed
+
+    private void jbFiltroFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltroFechaActionPerformed
+        if(jdcFiltroFecha.getDate() != null){
+            LocalDate ld = LocalDate.of(jdcFiltroFecha.getDate().getYear()+1900, jdcFiltroFecha.getDate().getMonth()+1, jdcFiltroFecha.getDate().getDate());
+            
+            listaReservas = (ArrayList<Reserva>)reservaData.getReservasPorFecha(ld);
+
+            if(!listaReservas.isEmpty()){
+                borrarFilasTabla();
+                cargarReservasFiltradas(compaFecha);
+                jdcFiltroFecha.setDate(null);
+            }else{
+                JOptionPane.showMessageDialog(this, "No Hay Reservas en la Fecha " + ld);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Seleccione una Fecha para Poder Filtrar!");
+        }
+    }//GEN-LAST:event_jbFiltroFechaActionPerformed
+
+    private void jbFiltroMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFiltroMesaActionPerformed
+        jdcFiltroFecha.setDate(null);
+        
+        String respuesta = JOptionPane.showInternalInputDialog(this, "Nro Mesa: ");
+        
+        if(respuesta != null){
+            try{
+                int id = Integer.parseInt(respuesta);
+
+                if(id <= 0){
+                    JOptionPane.showMessageDialog(this, "El Nro de Mesa Debe ser Positivo!");
                 }else{
-                    if(r.getFechaReserva().isAfter(r1.getFechaReserva())){
-                        return 1;
+                    listaReservas = reservaData.getReservasPorMesa(id);
+
+                    if(!listaReservas.isEmpty()){
+                        borrarFilasTabla();
+                        cargarReservasFiltradas(compaMesa);
                     }else{
-                        return 0;
+                        JOptionPane.showMessageDialog(this, "No Hay Reservas con la Mesa " + respuesta);
                     }
                 }
+            }catch(NumberFormatException nfe){
+                JOptionPane.showMessageDialog(this, respuesta + " No es un Número!");
             }
-        });
-    }//GEN-LAST:event_jbFechaReservaActionPerformed
+        }
+    }//GEN-LAST:event_jbFiltroMesaActionPerformed
 
     /**
      * Arma el Modelo de la Tabla
@@ -383,18 +529,35 @@ public class ReservaView extends javax.swing.JInternalFrame {
     private void cargarReservasEnTabla(Comparator compa){
         listaReservas = reservaData.getReservasActivas();
         
+        if(!listaReservas.isEmpty()){
+            Collections.sort(listaReservas, compa);
+        
+            for(Reserva r : listaReservas){
+                if(reservaVigente(r)){
+                    String horaYFecha = r.getFechaReserva().toString();
+                    horaYFecha = horaYFecha.replace("T", " / ");
+                    modeloTabla.addRow(new Object[]{
+                        r.getIdReserva(), r.getNombreCliente(), r.getDniCliente(), horaYFecha, r.getMesa().getIdMesa()
+                    });
+                }else{
+                    reservaData.borrarReserva(r.getIdReserva());
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "No Hay Reservas Activas!");
+        }
+        
+    }
+    
+    private void cargarReservasFiltradas(Comparator<Reserva> compa){
         Collections.sort(listaReservas, compa);
         
         for(Reserva r : listaReservas){
-            if(reservaVigente(r)){
-                String horaYFecha = r.getFechaReserva().toString();
-                horaYFecha = horaYFecha.replace("T", " / ");
-                modeloTabla.addRow(new Object[]{
-                    r.getIdReserva(), r.getNombreCliente(), r.getDniCliente(), horaYFecha, r.getMesa().getIdMesa()
-                });
-            }else{
-                reservaData.borrarReserva(r.getIdReserva());
-            }
+            String horaYFecha = r.getFechaReserva().toString();
+            horaYFecha = horaYFecha.replace("T", " / ");
+            modeloTabla.addRow(new Object[]{
+                r.getIdReserva(), r.getNombreCliente(), r.getDniCliente(), horaYFecha, r.getMesa().getIdMesa()
+            });
         }
     }
     
@@ -442,13 +605,18 @@ public class ReservaView extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbCancelar;
     private javax.swing.JButton jbCancelarReserva;
     private javax.swing.JButton jbFechaReserva;
+    private javax.swing.JButton jbFiltroFecha;
+    private javax.swing.JButton jbFiltroMesa;
+    private javax.swing.JButton jbFiltroNombre;
+    private javax.swing.JButton jbMesas;
     private javax.swing.JButton jbModificarReserva;
     private javax.swing.JButton jbNombreCliente;
     private javax.swing.JButton jbNuevaReserva;
     private javax.swing.JButton jbRefrescarTabla;
+    private com.toedter.calendar.JDateChooser jdcFiltroFecha;
+    private javax.swing.JLabel jlFiltrarPor;
     private javax.swing.JLabel jlOrdenarPor;
     private javax.swing.JLabel jlReservaMesas;
-    private javax.swing.JLabel jlReservasActivas;
     private javax.swing.JTable jtReservasActivas;
     // End of variables declaration//GEN-END:variables
 

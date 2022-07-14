@@ -172,7 +172,7 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
                     reserva.setMesa((Mesa)jcbMesas.getSelectedItem());
 
                     //si la mesa seleccionada esta disponible a esa hora y fecha, se pre¿ocede a realizar la reserva
-                    if(!reservaData.getReservaDeMesaXFecha(reserva.getMesa().getIdMesa(), fechaCambiada)){
+                    if(!reservaData.verificarReservaDeMesaXFecha(reserva.getMesa().getIdMesa(), fechaCambiada)){
 
                         reserva.setFechaReserva(fechaCambiada);
 
