@@ -44,11 +44,11 @@ public class Menu extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jmiStock = new javax.swing.JMenuItem();
         jmiConMesero = new javax.swing.JMenuItem();
-        jmiConMesas = new javax.swing.JMenuItem();
 
         jMenuItem9.setText("jMenuItem9");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(6);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -66,7 +66,6 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
 
         jMenu3.setBackground(new java.awt.Color(255, 255, 255));
-        jMenu3.setForeground(new java.awt.Color(255, 102, 0));
         jMenu3.setText("Salir");
         jMenu3.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
 
@@ -84,7 +83,6 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu3);
 
         jMenu1.setBackground(new java.awt.Color(255, 102, 51));
-        jMenu1.setForeground(new java.awt.Color(255, 255, 255));
         jMenu1.setText("Registrar");
         jMenu1.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
 
@@ -121,7 +119,6 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setBackground(new java.awt.Color(255, 102, 51));
-        jMenu2.setForeground(new java.awt.Color(255, 255, 255));
         jMenu2.setText("Pedido");
         jMenu2.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jMenu2.addActionListener(new java.awt.event.ActionListener() {
@@ -153,7 +150,6 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu4.setBackground(new java.awt.Color(255, 102, 51));
-        jMenu4.setForeground(new java.awt.Color(255, 255, 255));
         jMenu4.setText("Consultas");
         jMenu4.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
 
@@ -176,11 +172,6 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         jMenu4.add(jmiConMesero);
-
-        jmiConMesas.setBackground(new java.awt.Color(255, 255, 255));
-        jmiConMesas.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
-        jmiConMesas.setText("Mesas");
-        jMenu4.add(jmiConMesas);
 
         jMenuBar1.add(jMenu4);
 
@@ -319,7 +310,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JMenuItem jmiConMesas;
     private javax.swing.JMenuItem jmiConMesero;
     private javax.swing.JMenuItem jmiMesa;
     private javax.swing.JMenuItem jmiOrdenar;
