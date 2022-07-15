@@ -29,7 +29,6 @@ public class ReservaView extends javax.swing.JInternalFrame {
     
     private ReservaView_Reservar ventanaReservar = null;
     private ReservaView_Modificar ventanaModificar = null;
-    private ReservaView_SeleccionarFecha ventanaFecha = null;
     
     private Comparator<Reserva> compaID;
     private Comparator<Reserva> compaNombre;
