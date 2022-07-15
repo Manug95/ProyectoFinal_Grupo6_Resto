@@ -278,7 +278,7 @@ public class ReservaView_Reservar extends javax.swing.JInternalFrame {
         
         int i = 0;
         while(correcto && i < nombre.length()){
-            if(!Character.isAlphabetic(nombre.charAt(i))){
+            if(!Character.isAlphabetic(nombre.charAt(i)) || !Character.isSpaceChar(nombre.charAt(i))){
                 correcto = false;
             }
             i++;
