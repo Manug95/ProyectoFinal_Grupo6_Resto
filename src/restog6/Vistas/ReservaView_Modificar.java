@@ -72,10 +72,13 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
         jlModificarReserva.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jlModificarReserva.setText("Modificar Reserva");
 
+        jlNumeroMesa.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlNumeroMesa.setText("Mesa");
 
+        jlFecha.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlFecha.setText("Fecha");
 
+        jlHora.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlHora.setText("Hora");
 
         jdcFecha.setDateFormatString("yyyy-MM-dd");
@@ -113,7 +116,7 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jlNumeroMesa, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlFecha, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlHora))
+                            .addComponent(jlHora, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtfHora, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -137,7 +140,7 @@ public class ReservaView_Modificar extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlHora)
                     .addComponent(jtfHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbCancelar)
                     .addComponent(jbGuardarCambios))

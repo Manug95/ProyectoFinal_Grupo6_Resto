@@ -59,6 +59,7 @@ public class MesaView_HabilitacionesMesa extends javax.swing.JInternalFrame {
         jlHabDeshabMesa.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jlHabDeshabMesa.setText("Habilitar/Deshabilitar Mesa");
 
+        jlMesas.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlMesas.setText("Mesas");
 
         jcbMesas.addActionListener(new java.awt.event.ActionListener() {
@@ -67,6 +68,7 @@ public class MesaView_HabilitacionesMesa extends javax.swing.JInternalFrame {
             }
         });
 
+        jlEstadoActual.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlEstadoActual.setText("Estado Actual");
 
         grupoEstado.add(jrbHabilitada);
@@ -93,30 +95,31 @@ public class MesaView_HabilitacionesMesa extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(85, 85, 85)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlMesas)
+                                .addGap(18, 18, 18)
+                                .addComponent(jcbMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbConfirmar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jbCancelar)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlEstadoActual)
+                        .addGap(18, 18, 18)
+                        .addComponent(jrbHabilitada)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jrbDeshabilitada)
+                        .addGap(124, 124, 124))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jlHabDeshabMesa)
-                .addGap(74, 74, 74))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(85, 85, 85)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jlMesas)
-                        .addGap(18, 18, 18)
-                        .addComponent(jcbMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(47, 47, 47)
-                            .addComponent(jbConfirmar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jbCancelar))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jlEstadoActual)
-                            .addGap(18, 18, 18)
-                            .addComponent(jrbHabilitada)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jrbDeshabilitada))))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addGap(84, 84, 84))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

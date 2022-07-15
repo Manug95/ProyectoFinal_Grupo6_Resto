@@ -54,10 +54,13 @@ public class MesaView_Modificar extends javax.swing.JInternalFrame {
         jlModificarMesa.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jlModificarMesa.setText("Modificar Mesa");
 
+        jlElegirMesa.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlElegirMesa.setText("Elegir Mesa");
 
+        jlCapacidadNueva.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jlCapacidadNueva.setText("Capacidad Nueva");
 
+        jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Estado");
 
         grupoEstado.add(jrbLibre);
@@ -93,31 +96,33 @@ public class MesaView_Modificar extends javax.swing.JInternalFrame {
                         .addGap(118, 118, 118)
                         .addComponent(jlModificarMesa))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
+                        .addGap(46, 46, 46)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlCapacidadNueva)
-                                .addGap(18, 18, 18)
-                                .addComponent(jcbCapacidadNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel1)
                                         .addGap(18, 18, 18)
                                         .addComponent(jrbLibre)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(18, 18, 18)
                                         .addComponent(jrbOcupada))
                                     .addComponent(jbGuardarCambios))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jrbAtendida)
-                                    .addComponent(jbCancelar)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(jlElegirMesa)
-                        .addGap(18, 18, 18)
-                        .addComponent(jcbMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(75, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addComponent(jbCancelar))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jrbAtendida))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlCapacidadNueva)
+                                .addGap(18, 18, 18)
+                                .addComponent(jcbCapacidadNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jlElegirMesa)
+                                .addGap(18, 18, 18)
+                                .addComponent(jcbMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
