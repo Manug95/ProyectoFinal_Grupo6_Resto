@@ -36,7 +36,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         llenarProductoJCB();
         llenarCantidadJCB();
         calcularTotal();
-
     }
 
     //                                          METODOS PRIVADOS
@@ -293,7 +292,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar uno de los pedidos de la lista");
         }
-
     }//GEN-LAST:event_jbEliminarActionPerformed
 
     //-------------  [BOTON AGREGAR]  -----------------
@@ -317,7 +315,7 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
 
     //-------------  [BOTON FINALIZAR]  ---------------
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
-        if (!detalleD.obtenerDetallesPedidos(this.pedido.getIdPedido()).isEmpty()) {
+        if (this.jtPedido.getRowCount() != 0) {
             JOptionPane.showMessageDialog(this, "Su pedido ha sido guardado! /n Subtotal: $" + this.jtfSubtotal.getText());
         } else {
             if (pedidoD.eliminarPedido(pedido.getIdPedido())) {
@@ -338,7 +336,14 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
         int a = this.jtPedido.getRowCount() - 1;
         for (int i = a; i >= 0; i--) {
-            detalleD.eliminarDetallePedido((int) this.jtPedido.getValueAt(i, 0));
+            DetallePedido detallePedido = detalleD.obtenerDetallePedido((int) jtPedido.getValueAt(i, 0));
+            if (detalleD.eliminarDetallePedido(detallePedido.getIdDetalle())) {
+                Producto p = detallePedido.getProducto();
+                p.setStock(p.getStock()+ detallePedido.getCantidad());
+                if (productoD.modificarProducto(p)){
+                 detalleD.eliminarDetallePedido((int) this.jtPedido.getValueAt(i, 0));
+                }
+            }
         }
         mesaD.modificarEstadoDeMesa(pedido.getMesa().getIdMesa(), 'O');
         if (pedidoD.eliminarPedido(pedido.getIdPedido())) {
@@ -362,7 +367,7 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
             //tomar el producto original y su cantidad, si el productoOriginal es igual al producto Nuevo: a) si la cantNueva es mayor, debo restar del stock; o b) debo aumentar el stock en caso contrario
             //si el producto es distinto, debo aumentarle la cantidad original al stock del producto original
             //Y disminuir el stock del producto nuevo;
-            
+            //(Notas de mi para mi jaja)
             DetallePedido p = detalleD.obtenerDetallePedido((int) this.jtPedido.getValueAt(jtPedido.getSelectedRow(), 0));
             
             Producto pO = productoD.obtenerProducto(p.getProducto().getIdProducto());

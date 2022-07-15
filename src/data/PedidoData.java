@@ -161,11 +161,11 @@ public class PedidoData {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, pedido.getMesa().getIdMesa());
             ps.setInt(2, pedido.getMesero().getIdMesero());
-            ps.setTime(3, Time.valueOf(pedido.getFecha().toLocalTime()));
-            ps.setDate(4, Date.valueOf(pedido.getFecha().toLocalDate()));
-            ps.setBoolean(4, pedido.isPagado());
-            ps.setInt(5, pedido.getIdPedido());
+            ps.setDate(3, Date.valueOf(pedido.getFecha().toLocalDate()));
+            ps.setTime(4, Time.valueOf(pedido.getFecha().toLocalTime()));
+            ps.setBoolean(5, pedido.isPagado());
             ps.setBoolean(6, pedido.isActivo());
+            ps.setInt(7, pedido.getIdPedido());
             if (ps.executeUpdate() != 0){
                 modificado = true;
             }
@@ -178,7 +178,7 @@ public class PedidoData {
     
     /**
     * agregar PEDIDO
-    * @param pedido PEDIDO que se desea agregar
+    * @param pedido PEDIDO que se desea agregar (solo es necesario el id de mesa, mesero y el estado de pagado, lo demas se setea desde bd)
     * @return TRUE si se logro agregar el PEDIDO o FALSE en caso contrario
     */
     public boolean agregarPedido(Pedido pedido){
