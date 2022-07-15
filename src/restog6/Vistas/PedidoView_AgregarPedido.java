@@ -66,8 +66,6 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
         jLabel1.setOpaque(true);
 
-        jLabel2.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Reserva");
 
         jcbReserva.setBackground(new java.awt.Color(241, 217, 228));
@@ -75,8 +73,6 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
         jcbReserva.setForeground(new java.awt.Color(157, 102, 130));
         jcbReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Mesero");
 
         jcbMesero.setBackground(new java.awt.Color(241, 217, 228));
@@ -84,7 +80,6 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
         jcbMesero.setForeground(new java.awt.Color(157, 102, 130));
 
         jbNext.setBackground(new java.awt.Color(102, 102, 102));
-        jbNext.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jbNext.setForeground(new java.awt.Color(51, 51, 51));
         jbNext.setText("Siguiente");
         jbNext.setBorder(null);
@@ -95,9 +90,7 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
         });
 
         jcbCancel.setBackground(new java.awt.Color(102, 102, 102));
-        jcbCancel.setFont(new java.awt.Font("Ebrima", 0, 36)); // NOI18N
-        jcbCancel.setForeground(new java.awt.Color(255, 255, 255));
-        jcbCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/restog6/resources/exitIcon11.png"))); // NOI18N
+        jcbCancel.setText("Cancelar");
         jcbCancel.setBorder(null);
         jcbCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,7 +122,7 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
                         .addComponent(jcbCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(102, 102, 102)
                         .addComponent(jbNext, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,7 +140,7 @@ public class PedidoView_AgregarPedido extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbNext, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcbCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();

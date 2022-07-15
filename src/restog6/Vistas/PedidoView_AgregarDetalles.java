@@ -79,7 +79,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         setBorder(null);
         setOpaque(true);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Producto");
 
@@ -89,11 +88,9 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Cantidad");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Total");
 
@@ -112,7 +109,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         jLabel4.setOpaque(true);
 
         jbFinalizar.setBackground(new java.awt.Color(102, 102, 102));
-        jbFinalizar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         jbFinalizar.setText("Finalizar Pedido");
         jbFinalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -122,7 +118,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         });
 
         jbEliminar.setBackground(new java.awt.Color(102, 102, 102));
-        jbEliminar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbEliminar.setForeground(new java.awt.Color(255, 255, 255));
         jbEliminar.setText("Eliminar");
         jbEliminar.setBorder(null);
@@ -163,7 +158,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         jScrollPane2.setViewportView(jtPedido);
 
         jbAgregar.setBackground(new java.awt.Color(102, 102, 102));
-        jbAgregar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbAgregar.setForeground(new java.awt.Color(255, 255, 255));
         jbAgregar.setText("Agregar");
         jbAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -175,7 +169,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         });
 
         jbCancelar.setBackground(new java.awt.Color(102, 102, 102));
-        jbCancelar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbCancelar.setForeground(new java.awt.Color(255, 255, 255));
         jbCancelar.setText("Cancelar Pedido");
         jbCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -185,7 +178,6 @@ public class PedidoView_AgregarDetalles extends javax.swing.JInternalFrame {
         });
 
         jbModificar.setBackground(new java.awt.Color(102, 102, 102));
-        jbModificar.setFont(new java.awt.Font("Franklin Gothic Medium", 0, 18)); // NOI18N
         jbModificar.setForeground(new java.awt.Color(255, 255, 255));
         jbModificar.setText("Modificar");
         jbModificar.setPreferredSize(new java.awt.Dimension(105, 37));
