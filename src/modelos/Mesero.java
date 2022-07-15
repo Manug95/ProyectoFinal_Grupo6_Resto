@@ -89,7 +89,7 @@ public class Mesero {
     //---------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "NombreMesero=" + nombreMesero + ", apellido=" + apellido;
+        return nombreMesero + ", " + apellido + " dni: " + dni;
     }
 
     @Override
