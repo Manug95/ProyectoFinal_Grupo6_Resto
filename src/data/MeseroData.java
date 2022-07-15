@@ -1,15 +1,17 @@
+
 package data;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import modelos.Mesa;
 import modelos.Mesero;
 import modelos.Pedido;
 
@@ -175,11 +177,10 @@ public class MeseroData {
         ArrayList<Pedido> pedidos = new ArrayList<>();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         String f = formato.format(fecha);
-        String sql = "SELECT * "
-                   + "FROM pedido "
-                   + "WHERE horaFecha BETWEEN '" + f + " 00:00:00' AND '" + f + " 23:59:59' AND pagado = 1";        
+        String sql = "SELECT * FROM pedido WHERE fecha = ? AND activo = 1;";        
         try{
             PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, f);
             ResultSet rs = ps.executeQuery();
             Pedido pedido;
             while(rs.next()){
@@ -193,35 +194,36 @@ public class MeseroData {
             }            
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al obtener los productos" + sqle);
+            JOptionPane.showMessageDialog(null, "Error al obtener los pedidos" + sqle);
         }       
        return pedidos;
     }
     
-    public List<Pedido> pedidosXFechaYMesero(Date fecha, int idMesero){
+    public List<Pedido> pedidosXFechaYMesero(Date fecha, int id){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         String f = formato.format(fecha);
         String sql = "SELECT * "
                    + "FROM pedido "
-                   + "WHERE horaFecha BETWEEN '" + f + " 00:00:00' AND '" + f + " 23:59:59' AND pagado = 1 AND idMesero = ?";        
+                   + "WHERE fecha = ? AND idMesero = ? AND activo = 1";                      
         try{
             PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1,f);
+            ps.setInt(2,id);
             ResultSet rs = ps.executeQuery();
-            ps.setInt(1, idMesero);
             Pedido pedido;
             while(rs.next()){
                 pedido = new Pedido();
                 pedido.setIdPedido(rs.getInt("idPedido"));
                 pedido.setPagado(rs.getBoolean("pagado"));
                 pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
-                pedido.setMesa(unaMesa.getMesaPorId(rs.getInt("idMesa")));
+                pedido.setMesa(this.unaMesa.getMesaPorId(rs.getInt("idMesa")));
                 pedido.setMesero(obtenerMesero(rs.getInt("idMesero")));                
                 pedidos.add(pedido);
             }            
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al obtener los productos" + sqle);
+            JOptionPane.showMessageDialog(null, "Error al obtener los pedidos" + sqle);
         }       
        return pedidos;
     }
@@ -232,11 +234,12 @@ public class MeseroData {
         String f = formato.format(fecha);
         String sql = "SELECT * "
                    + "FROM pedido "
-                   + "WHERE horaFecha BETWEEN '" + f + " 00:00:00' AND '" + f + " 23:59:59' AND pagado = 1 AND idMesa = ?";        
+                   + "WHERE fecha = ? AND idMesa = ? AND activo = 1";        
         try{
             PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, f);
+            ps.setInt(2, idMesa);
             ResultSet rs = ps.executeQuery();
-            ps.setInt(1, idMesa);
             Pedido pedido;
             while(rs.next()){
                 pedido = new Pedido();
@@ -249,10 +252,81 @@ public class MeseroData {
             }            
             ps.close();
         }catch(SQLException sqle){
-            JOptionPane.showMessageDialog(null, "Error al obtener los productos" + sqle);
+            JOptionPane.showMessageDialog(null, "Error al obtener los pedidos" + sqle);
         }       
        return pedidos;
     }
+    
+    public List<Pedido>pedidosImpagos(){
+        ArrayList<Pedido> pedidos = new ArrayList<>();        
+        String sql = "SELECT * "
+                   + "FROM pedido "
+                   + "WHERE pagado = 0 AND activo = 1";        
+        try{
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            Pedido pedido;
+            while(rs.next()){
+                pedido = new Pedido();
+                pedido.setIdPedido(rs.getInt("idPedido"));
+                pedido.setPagado(rs.getBoolean("pagado"));
+                pedido.setFecha(rs.getTime("hora").toLocalTime().atDate(rs.getDate("fecha").toLocalDate()));
+                pedido.setMesa(unaMesa.getMesaPorId(rs.getInt("idMesa")));
+                pedido.setMesero(obtenerMesero(rs.getInt("idMesero")));                
+                pedidos.add(pedido);
+            }            
+            ps.close();
+        }catch(SQLException sqle){
+            JOptionPane.showMessageDialog(null, "Error al obtener los pedidos" + sqle);
+        }       
+       return pedidos;
+    }
+    
+    public boolean PagarPedido(int id){
+        boolean modificado = false;
+        try {
+            String sql = "UPDATE pedido SET pagado = 1 WHERE idPedido = ? AND activo = 1";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, id);
+            if (ps.executeUpdate() != 0){
+                modificado = true;
+            }
+        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "No se pudo realizar el pago");
+        }
+        return modificado;
+    }
+    
+    public boolean anularPedido(int id){
+        boolean modificado = false;
+        try {
+            String sql = "UPDATE detallepedido,pedido SET detallepedido.activo = 0, pedido.activo = 0 WHERE pedido.idPedido = ?";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, id);
+            if (ps.executeUpdate() != 0){
+                modificado = true;
+            }
+        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "No se pudo realizar el pago");
+        }
+        return modificado;
+    }
+    
+    public boolean liberarMesa(Mesa mesa){
+        boolean modificado = false;
+        try {
+            String sql = "UPDATE mesa SET estado = 'L' WHERE mesa.idMesa = ?";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, mesa.getIdMesa());
+            if (ps.executeUpdate() != 0){
+                modificado = true;
+            }
+        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "No se pudo realizar el pago");
+        }
+        return modificado;
+    }
+    
     //                                          METODOS PRIVADOS
     //---------------------------------------------------------------------------------------------------------------
 }
