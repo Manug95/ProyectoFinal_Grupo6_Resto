@@ -91,6 +91,11 @@ public class Menu extends javax.swing.JFrame {
         jtmMesero.setBackground(new java.awt.Color(255, 255, 255));
         jtmMesero.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 18)); // NOI18N
         jtmMesero.setText("Mesero");
+        jtmMesero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtmMeseroActionPerformed(evt);
+            }
+        });
         jMenu1.add(jtmMesero);
 
         jmiMesa.setBackground(new java.awt.Color(255, 255, 255));
@@ -216,6 +221,12 @@ public class Menu extends javax.swing.JFrame {
 
     private void jmiConMeseroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiConMeseroActionPerformed
         // TODO add your handling code here:
+        MeseroConsulta mec = new MeseroConsulta(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(mec);
+        jDesktopPane1.moveToFront(mec);
+        jDesktopPane1.repaint();
+        mec.setVisible(true);
     }//GEN-LAST:event_jmiConMeseroActionPerformed
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
@@ -254,6 +265,16 @@ public class Menu extends javax.swing.JFrame {
         jDesktopPane1.repaint();
         pv.setVisible(true);
     }//GEN-LAST:event_jmiProductoActionPerformed
+
+    private void jtmMeseroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtmMeseroActionPerformed
+        // TODO add your handling code here:
+        MeseroView mv = new MeseroView(conexion);
+        jDesktopPane1.removeAll();
+        jDesktopPane1.add(mv);
+        jDesktopPane1.moveToFront(mv);
+        jDesktopPane1.repaint();
+        mv.setVisible(true);
+    }//GEN-LAST:event_jtmMeseroActionPerformed
 
     /**
      * @param args the command line arguments
