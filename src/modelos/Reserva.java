@@ -93,7 +93,9 @@ public class Reserva {
     @Override
     public String toString() {
         //return "Reserva{" + "idReserva=" + idReserva + ", mesa=" + mesa + ", fechaReserva=" + fechaReserva + ", dniCliente=" + dniCliente + ", nombreCliente=" + nombreCliente + ", activo=" + activo + '}';
-        return idReserva + " - " + nombreCliente + "   " + fechaReserva;
+        String fecha = fechaReserva.toString();
+        fecha = fecha.replace("T", "  ");
+        return idReserva + " - " + nombreCliente + "   " + fecha;
     }
 
     @Override
